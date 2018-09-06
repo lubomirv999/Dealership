@@ -9,11 +9,11 @@ using Microsoft.EntityFrameworkCore.Storage;
 using Microsoft.EntityFrameworkCore.Storage.Internal;
 using System;
 
-namespace Dealership.Data.Migrations
+namespace Dealership.Migrations
 {
     [DbContext(typeof(DealershipDbContext))]
-    [Migration("20180905112313_CarTable")]
-    partial class CarTable
+    [Migration("20180906150457_Initial")]
+    partial class Initial
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -80,7 +80,7 @@ namespace Dealership.Data.Migrations
 
                     b.HasIndex("CarId");
 
-                    b.ToTable("Image");
+                    b.ToTable("Images");
                 });
 
             modelBuilder.Entity("Dealership.Models.ApplicationUser", b =>

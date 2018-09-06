@@ -13,6 +13,8 @@
 
         public DbSet<Car> Cars { get; set; }
 
+        public DbSet<Image> Images { get; set; }
+
         protected override void OnModelCreating(ModelBuilder builder)
         {
             builder.Entity<Car>()
