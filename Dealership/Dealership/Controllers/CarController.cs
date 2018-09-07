@@ -1,8 +1,13 @@
 ﻿namespace Dealership.Controllers
 {
+    using Dealership.Models;
     using Dealership.Models.CarViewModels;
+    using Dealership.Data;
     using Dealership.Services;
     using Microsoft.AspNetCore.Mvc;
+    using System.Collections.Generic;
+    using System.Linq;
+
 
     public class CarController : Controller
     {
@@ -17,7 +22,7 @@
 
         [HttpPost]
         public IActionResult Create(CarCreateFormModel addCarFormModel)
-        {            
+        {
             if (!ModelState.IsValid)
             {
                 return this.View(addCarFormModel);
@@ -42,9 +47,35 @@
             if (!success)
             {
                 return this.BadRequest();
-            }            
+            }
 
             return this.RedirectToAction(nameof(Create));
+        }
+
+        public ViewResult AllCars()
+        {
+            return View(new CarListModel
+            {
+                Cars = from car in cars.Cars()
+                       from img in cars.Images()
+                       where car.Id == img.CarId
+                       select car
+            }
+                );
+        }
+        [HttpPost]
+        public IActionResult Delete(int carId)
+        {
+            if (cars.Delete(carId))
+            {
+                TempData["message"] = "Success!";
+            }
+            else
+            {
+                TempData["message"] = "Failed!";
+            }
+
+            return RedirectToAction("AllCars");
         }
     }
 }

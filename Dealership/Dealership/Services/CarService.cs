@@ -3,6 +3,9 @@
     using Dealership.Data;
     using Dealership.Data.Enums;
     using System.Collections.Generic;
+    using Dealership.Models.CarViewModels;
+    using System.Linq;
+    using Microsoft.AspNetCore.Mvc;
 
     public class CarService : ICarService
     {
@@ -50,5 +53,19 @@
 
             return true;
         }
+
+        public bool Delete(int carId)
+        {
+            Car CarToDelete = db.Cars.FirstOrDefault(p=> p.Id == carId);
+            if (CarToDelete != null)
+            {
+                db.Cars.Remove(CarToDelete);
+                db.SaveChanges();
+                return true;
+            }
+            return false;
+        }
+        public IEnumerable<Car> Cars() => db.Cars;
+        public IEnumerable<Image> Images() => db.Images;
     }
 }
