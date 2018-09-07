@@ -2,11 +2,8 @@
 {
     using Dealership.Models;
     using Dealership.Models.CarViewModels;
-    using Dealership.Data;
     using Dealership.Services;
     using Microsoft.AspNetCore.Mvc;
-    using System.Collections.Generic;
-    using System.Linq;
 
 
     public class CarController : Controller
@@ -56,17 +53,14 @@
         {
             return View(new CarListModel
             {
-                Cars = from car in cars.Cars()
-                       from img in cars.Images()
-                       where car.Id == img.CarId
-                       select car
-            }
-                );
+                Cars = this.cars.All()
+            });
         }
+
         [HttpPost]
         public IActionResult Delete(int carId)
         {
-            if (cars.Delete(carId))
+            if (this.cars.Delete(carId))
             {
                 TempData["message"] = "Success!";
             }

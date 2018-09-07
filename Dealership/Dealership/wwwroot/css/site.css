@@ -92,3 +92,56 @@ input[type=text]:focus, textarea:focus {
     margin: 5px 1px 3px 0px;
     border: 1px solid rgba(81, 203, 238, 1);
 }
+
+.sell-car-btn{
+    font-size: 1.2em;
+    padding: 5px 25px;
+    margin: 25px auto;
+}
+
+/* All Cars CSS */
+
+#manufacturer-all{
+    padding-right: 5px;
+}
+
+.car-all:hover {
+    box-shadow: 0 0 5px rgba(81, 203, 238, 1);
+    border: 1px solid rgba(81, 203, 238, 1);
+}
+
+.all-img {
+    width: 80%;    
+}
+
+#car-all-headings{
+    font-size: 1.7em;
+}
+
+#car-all-info{
+    font-size: 1.2em;
+}
+
+.delete-car-all-btn{
+    font-size: 1.1em;
+    padding: 5px 25px;
+    margin-top: 30px;
+}
+
+.delete-car-all-btn:hover {
+    -webkit-box-shadow: 0px 0px 5px 1px rgba(255,0,0,1);
+    -moz-box-shadow: 0px 0px 5px 1px rgba(255,0,0,1);
+    box-shadow: 0px 0px 5px 1px rgba(255,0,0,1);
+}
+
+.car-all-price {
+    border-radius: 10px;
+    background-color: #87CEFA;
+    color: whitesmoke;
+    padding: 5px 15px;
+}
+
+footer{
+    text-align: center;
+    font-size: 1.3em;
+}
