@@ -60,6 +60,66 @@
             }
         }
 
+        public bool Edit(int id, string manufacturer, string model, short yearOfProduction, BodyType bodyType, Condition condition, TypeOfTransmission typeOfTransmission, EuroStandart euroStandart, EngineType engineType, int travelledDistance, short horsePower, string color, string saleDescription, decimal price, string imagesUrls)
+        {
+            try
+            {
+                if (!this.db.Cars.Any(p => p.Id == id))
+                {
+                    return false;
+                }
+
+                var car = this.db.Cars.Find(id);
+
+                if (car == null)
+                {
+                    return false;
+                }
+
+                List<Image> images = new List<Image>();
+
+                var imagesCount = imagesUrls.Split(", ");
+
+                for (int i = 0; i < imagesCount.Length; i++)
+                {
+                    Image image = new Image();
+                    image.ImageUrl = imagesCount[i];
+                    images.Add(image);
+
+                    foreach (var img in this.db.Images)
+                    {
+                        if (!(img.Id == image.Id))
+                        {
+                            this.db.Images.Add(image);
+                        }
+                    }
+                }
+
+                car.Manufacturer = manufacturer;
+                car.Model = model;
+                car.YearOfProduction = yearOfProduction;
+                car.BodyType = bodyType;
+                car.Condition = condition;
+                car.TypeOfTransmission = typeOfTransmission;
+                car.EuroStandart = euroStandart;
+                car.EngineType = engineType;
+                car.TravelledDistance = travelledDistance;
+                car.HorsePower = horsePower;
+                car.Color = color;
+                car.SaleDescription = saleDescription;
+                car.Price = price;
+                car.Images = images;
+
+                this.db.SaveChanges();
+
+                return true;
+            }
+            catch
+            {
+                return false;
+            }
+        }
+
         public bool Delete(int carId)
         {
             try
@@ -88,5 +148,15 @@
         {
             return this.db.Cars.Include("Images");
         }
+
+        public Car FindById(int id)
+            => this.db
+                .Cars
+                .Include("Images")
+                .Where(c => c.Id == id)
+                .FirstOrDefault();
+
+        public bool Exists(int id)
+            => this.db.Cars.Any(c => c.Id == id);
     }
 }

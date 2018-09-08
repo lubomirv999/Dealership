@@ -8,32 +8,43 @@
 
 <h2>@TempData["message"]</h2>
 
-@foreach (var c in Model.Cars)
+@if (Model.Cars.Any())
 {
-    <div class="well col-xs-12 col-sm-12col-md-12 col-lg-12 center-block car-all">
-        <table class="table-responsive">
-            <tr>
-                <td class="col-xs-4 col-sm-3 col-md-6 col-lg-4">
-                    <img src="@c.Images.FirstOrDefault().ImageUrl" class="img-thumbnail img-responsive" />
-                </td>
-                <td>
-                    <div class="bg-faded p-1">
-                        <p id="car-all-headings">
-                            <span id="manufacturer-all">@c.Manufacturer</span><span>@c.Model</span>
-                            <span class="car-all-price" style="float:right">
-                                @c.Price &euro;
-                            </span>
-                        </p>
-                        <p id="car-all-info">Year: @(c.YearOfProduction) With: @(c.TravelledDistance) km. Color: @c.Color Condition: @(c.Condition)</p>
-                        <form asp-action="Delete" method="post">
-                            <input type="hidden" name="carId" value="@c.Id" />
-                            <button type="submit" class="btn btn-danger btn-sm delete-car-all-btn">
-                                Delete
-                            </button>
-                        </form>
-                    </div>
-                </td>
-            </tr>
-        </table>
-    </div>
+    @foreach (var c in Model.Cars)
+    {
+        <div class="well col-xs-12 col-sm-12col-md-12 col-lg-12 center-block car-all">
+            <table class="table-responsive">
+                <tr>
+                    <td class="col-xs-4 col-sm-3 col-md-6 col-lg-4">
+                        <img src="@c.Images.FirstOrDefault().ImageUrl" class="img-thumbnail img-responsive" />
+                    </td>
+                    <td>
+                        <div class="bg-faded p-1">
+                            <p id="car-all-headings">
+                                <span id="manufacturer-all">@c.Manufacturer</span><span>@c.Model</span>
+                                <span class="car-all-price" style="float:right">
+                                    @c.Price &euro;
+                                </span>
+                            </p>
+                            <p id="car-all-info">Year: @(c.YearOfProduction) With: @(c.TravelledDistance) km. Color: @c.Color Condition: @(c.Condition)</p>
+                            <div id="actions-car-all">
+                                <form asp-action="Delete" method="post">
+                                    <input type="hidden" name="carId" value="@c.Id" />
+                                    <button type="submit" class="btn btn-danger btn-sm delete-car-all-btn">
+                                        Delete
+                                    </button>
+                                </form>
+
+                                <a class="btn btn-warning btn-md edit-car-all-btn" asp-controller="Car" asp-action="Edit" asp-route-id="@c.Id">Edit</a>
+                            </div>
+                        </div>
+                    </td>
+                </tr>
+            </table>
+        </div>
+    }
+}
+else
+{
+    <h3>There are no cars in our catalog!</h3>
 }

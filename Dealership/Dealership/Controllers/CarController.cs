@@ -5,7 +5,6 @@
     using Dealership.Services;
     using Microsoft.AspNetCore.Mvc;
 
-
     public class CarController : Controller
     {
         private readonly ICarService cars;
@@ -13,6 +12,14 @@
         public CarController(ICarService cars)
         {
             this.cars = cars;
+        }
+
+        public ViewResult AllCars()
+        {
+            return View(new CarListModel
+            {
+                Cars = this.cars.All()
+            });
         }
 
         public IActionResult Create() => View();
@@ -46,15 +53,67 @@
                 return this.BadRequest();
             }
 
-            return this.RedirectToAction(nameof(Create));
+            TempData["message"] = "You have succesfully added your car for sale.";
+
+            return this.RedirectToAction(nameof(AllCars));
+        }        
+
+        public IActionResult Edit(int id)
+        {
+            var car = this.cars.FindById(id);
+
+            if (car == null)
+            {
+                return NotFound();
+            }
+
+            string images = "";
+
+            foreach (var image in car.Images)
+            {
+                images += image.ImageUrl + ", ";
+            }
+            
+            return this.View(new CarCreateFormModel
+            {
+                Manufacturer = car.Manufacturer,
+                Model = car.Model,
+                YearOfProduction = car.YearOfProduction,
+                BodyType = car.BodyType,
+                Condition = car.Condition,
+                TypeOfTransmission = car.TypeOfTransmission,
+                EuroStandart = car.EuroStandart,
+                EngineType = car.EngineType,
+                TravelledDistance = car.TravelledDistance,
+                HorsePower = car.HorsePower,
+                Color = car.Color,
+                SaleDescription = car.SaleDescription,
+                Price = car.Price,
+                Images = images.Trim(new char[] { ' ', ',' })
+            });
         }
 
-        public ViewResult AllCars()
+        [HttpPost]
+        public IActionResult Edit(int id, CarCreateFormModel editModel)
         {
-            return View(new CarListModel
+            if (!ModelState.IsValid)
             {
-                Cars = this.cars.All()
-            });
+                return this.View(editModel);
+            }
+
+            var carExists = this.cars.Exists(id);
+
+            if (!carExists)
+            {
+                return NotFound();
+            }
+
+            this.cars.Edit(id, editModel.Manufacturer, editModel.Model, editModel.YearOfProduction, editModel.BodyType, editModel.Condition, editModel.TypeOfTransmission, editModel.EuroStandart, editModel.EngineType, editModel.TravelledDistance, editModel.HorsePower, editModel.Color, editModel.SaleDescription, editModel.Price,
+                editModel.Images);
+
+            TempData["message"] = "You have succesfully edited your car.";
+
+            return this.RedirectToAction(nameof(AllCars));
         }
 
         [HttpPost]
@@ -62,11 +121,11 @@
         {
             if (this.cars.Delete(carId))
             {
-                TempData["message"] = "Success!";
+                TempData["message"] = "You have successfully deleted your car!";
             }
             else
             {
-                TempData["message"] = "Failed!";
+                TempData["message"] = "You failed deleting your car!";
             }
 
             return RedirectToAction("AllCars");
