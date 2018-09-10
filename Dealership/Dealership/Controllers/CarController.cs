@@ -22,6 +22,15 @@
             });
         }
 
+        [HttpPost]
+        public ViewResult AllCars(string searchQuery)
+        {
+            return View(new CarListModel
+            {
+                Cars = this.cars.Search(searchQuery)
+            });
+        }
+
         public IActionResult Create() => View();
 
         [HttpPost]

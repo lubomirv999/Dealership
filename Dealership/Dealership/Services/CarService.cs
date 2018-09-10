@@ -158,5 +158,15 @@
 
         public bool Exists(int id)
             => this.db.Cars.Any(c => c.Id == id);
+
+        public IEnumerable<Car> Search(string searchQuery)
+        {
+            if(string.IsNullOrEmpty(searchQuery))
+            {
+                return All();
+            }
+
+            return this.db.Cars.Where(c => c.Manufacturer.Contains(searchQuery) || c.Model.Contains(searchQuery) || c.SaleDescription.Contains(searchQuery)).Include("Images");
+        }
     }
 }
