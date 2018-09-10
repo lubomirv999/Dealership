@@ -1,5 +1,6 @@
 ﻿namespace Dealership.Controllers
 {
+    using Dealership.Data;
     using Dealership.Models;
     using Dealership.Models.CarViewModels;
     using Dealership.Services;
@@ -65,7 +66,7 @@
             TempData["message"] = "You have succesfully added your car for sale.";
 
             return this.RedirectToAction(nameof(AllCars));
-        }        
+        }
 
         public IActionResult Edit(int id)
         {
@@ -82,7 +83,7 @@
             {
                 images += image.ImageUrl + ", ";
             }
-            
+
             return this.View(new CarCreateFormModel
             {
                 Manufacturer = car.Manufacturer,
@@ -138,6 +139,20 @@
             }
 
             return RedirectToAction("AllCars");
+        }
+
+        public IActionResult Details(int id)
+        {
+            var carExists = this.cars.Exists(id);
+
+            if (!carExists)
+            {
+                return NotFound();
+            }
+
+            Car car = this.cars.FindById(id);
+
+            return View(car);
         }
     }
 }

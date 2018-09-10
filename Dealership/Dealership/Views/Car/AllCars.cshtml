@@ -27,7 +27,7 @@
                                 </span>
                             </p>
                             <p id="car-all-info">Year: @(c.YearOfProduction) With: @(c.TravelledDistance) km. Color: @c.Color Condition: @(c.Condition)</p>
-                            <div id="actions-car-all">
+                            <div id="actions-car-all">                                
                                 <form asp-action="Delete" method="post">
                                     <input type="hidden" name="carId" value="@c.Id" />
                                     <button type="submit" class="btn btn-danger btn-sm delete-car-all-btn">
@@ -35,7 +35,8 @@
                                     </button>
                                 </form>
 
-                                <a class="btn btn-warning btn-md edit-car-all-btn" asp-controller="Car" asp-action="Edit" asp-route-id="@c.Id">Edit</a>
+                                <a class="btn btn-warning btn-md edit-car-all-btn" asp-controller="Car" asp-action="Edit" asp-route-id="@c.Id">Edit</a>                                
+                                <a class="btn btn-success btn-md detail-car-all-btn" asp-controller="Car" asp-action="Details" asp-route-id="@c.Id">Details</a>                                
                             </div>
                         </div>
                     </td>

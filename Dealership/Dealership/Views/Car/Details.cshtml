@@ -1,0 +1,37 @@
+﻿@model Car
+
+@{
+    ViewData["Title"] = Model.Manufacturer + " " + Model.Model + " " + Model.YearOfProduction;
+}
+
+<h1 class="text-center">Details</h1>
+
+<div class="details-page">
+    <div>
+        <p><span class="detail-info">@Model.Manufacturer @Model.Model</span></p>
+        <p>Price: <span class="detail-info">@Model.Price &euro;</span></p>
+        <p>Year: <span class="detail-info">@Model.YearOfProduction</span></p>
+        <p>Type: <span class="detail-info">@Model.BodyType</span></p>
+        <p>Condition: <span class="detail-info">@Model.Condition</span></p>
+    </div>
+
+    <div>
+        <p>Gearbox: <span class="detail-info">@Model.TypeOfTransmission</span></p>
+        <p>Kilometers: <span class="detail-info">@Model.TravelledDistance</span></p>
+        <p>Horsepower: <span class="detail-info">@Model.HorsePower</span></p>
+        <p>Color: <span class="detail-info">@Model.Color</span></p>
+        <p>Euro standart <span class="detail-info">@Model.EuroStandart</span></p>
+        <p>Fuel: <span class="detail-info">@Model.EngineType</span></p>
+    </div>
+</div>
+
+<div class="col-md-12">
+    @foreach (var image in Model.Images)
+    {
+        <img class="col-md-4 col-xs-12 details-img" src="@image.ImageUrl" />
+    }
+</div>
+
+<div class="details-page-description">
+    <p>@Model.SaleDescription</p>
+</div>
