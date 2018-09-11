@@ -1,4 +1,4 @@
-﻿@model CarCreateFormModel
+﻿@model Car
 
 @{
     ViewBag.Title = "Sell Car";
@@ -8,7 +8,7 @@
 
 <div class="row createForm">
     <div class="col-md-12">
-        <form method="post">
+        <form method="post" enctype="multipart/form-data">
             <div asp-validation-summary="All" class="text-danger"></div>
 
             <div class="left-create-car-part col-md-6">
@@ -46,10 +46,10 @@
                     <label class="create-car-labels" asp-for="Color"></label>
                     <input asp-for="Color" class="form-control" />
                     <span asp-validation-for="Color" class="text-danger"></span>
-                </div>                                
+                </div>
             </div>
 
-            <div class="right-create-car-part col-md-6">                
+            <div class="right-create-car-part col-md-6">
                 <div class="form-group">
                     <label class="create-car-labels" asp-for="SaleDescription"></label>
                     <input asp-for="SaleDescription" class="form-control" />
@@ -63,11 +63,10 @@
                 </div>
 
                 <div class="form-group">
-                    <label class="create-car-labels" asp-for="Images"></label>
-                    <input asp-for="Images" class="form-control" />
-                    <span asp-validation-for="Images" class="text-danger"></span>
+                    <label class="create-car-labels">Images</label>
+                    <input name="images" type="file" multiple="multiple" class="form-control" />
                 </div>
-            </div>            
+            </div>
 
             <div class="form-group">
                 <label class="create-car-labels" asp-for="BodyType"></label>
@@ -98,7 +97,7 @@
                 <select asp-for="EngineType" asp-items="@Html.GetEnumSelectList<EngineType>()"></select>
                 <span asp-validation-for="EngineType" class="text-danger"></span>
             </div>
-            
+
             <div class="create-car-btn col-md-12">
                 <button type="submit" class="btn btn-primary sell-car-btn">Sell Car</button>
             </div>

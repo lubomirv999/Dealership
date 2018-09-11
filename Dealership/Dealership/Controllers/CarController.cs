@@ -2,9 +2,10 @@
 {
     using Dealership.Data;
     using Dealership.Models;
-    using Dealership.Models.CarViewModels;
     using Dealership.Services;
+    using Microsoft.AspNetCore.Http;
     using Microsoft.AspNetCore.Mvc;
+    using System.Collections.Generic;
 
     public class CarController : Controller
     {
@@ -35,37 +36,35 @@
         public IActionResult Create() => View();
 
         [HttpPost]
-        public IActionResult Create(CarCreateFormModel addCarFormModel)
+        public IActionResult Create(Car addCarModel, ICollection<IFormFile> images)
         {
             if (!ModelState.IsValid)
             {
-                return this.View(addCarFormModel);
+                return this.View(addCarModel);
             }
 
-            var success = this.cars.Add(
-                addCarFormModel.Manufacturer,
-                addCarFormModel.Model,
-                addCarFormModel.YearOfProduction,
-                addCarFormModel.BodyType,
-                addCarFormModel.Condition,
-                addCarFormModel.TypeOfTransmission,
-                addCarFormModel.EuroStandart,
-                addCarFormModel.EngineType,
-                addCarFormModel.TravelledDistance,
-                addCarFormModel.HorsePower,
-                addCarFormModel.Color,
-                addCarFormModel.SaleDescription,
-                addCarFormModel.Price,
-                addCarFormModel.Images);
-
-            if (!success)
+            var car = new Car
             {
-                return this.BadRequest();
-            }
+                Manufacturer = addCarModel.Manufacturer,
+                Model = addCarModel.Model,
+                YearOfProduction = addCarModel.YearOfProduction,
+                BodyType = addCarModel.BodyType,
+                Condition = addCarModel.Condition,
+                TypeOfTransmission = addCarModel.TypeOfTransmission,
+                EuroStandart = addCarModel.EuroStandart,
+                EngineType = addCarModel.EngineType,
+                TravelledDistance = addCarModel.TravelledDistance,
+                HorsePower = addCarModel.HorsePower,
+                Color = addCarModel.Color,
+                SaleDescription = addCarModel.SaleDescription,
+                Price = addCarModel.Price
+            };
+
+            this.cars.Add(addCarModel, images);
 
             TempData["message"] = "You have succesfully added your car for sale.";
 
-            return this.RedirectToAction(nameof(AllCars));
+            return this.RedirectToAction("AllCars");
         }
 
         public IActionResult Edit(int id)
@@ -77,14 +76,7 @@
                 return NotFound();
             }
 
-            string images = "";
-
-            foreach (var image in car.Images)
-            {
-                images += image.ImageUrl + ", ";
-            }
-
-            return this.View(new CarCreateFormModel
+            return this.View(new Car
             {
                 Manufacturer = car.Manufacturer,
                 Model = car.Model,
@@ -99,12 +91,12 @@
                 Color = car.Color,
                 SaleDescription = car.SaleDescription,
                 Price = car.Price,
-                Images = images.Trim(new char[] { ' ', ',' })
+                Images = car.Images
             });
         }
 
         [HttpPost]
-        public IActionResult Edit(int id, CarCreateFormModel editModel)
+        public IActionResult Edit(int id, Car editModel, ICollection<IFormFile> images)
         {
             if (!ModelState.IsValid)
             {
@@ -118,25 +110,17 @@
                 return NotFound();
             }
 
-            this.cars.Edit(id, editModel.Manufacturer, editModel.Model, editModel.YearOfProduction, editModel.BodyType, editModel.Condition, editModel.TypeOfTransmission, editModel.EuroStandart, editModel.EngineType, editModel.TravelledDistance, editModel.HorsePower, editModel.Color, editModel.SaleDescription, editModel.Price,
-                editModel.Images);
+            this.cars.Edit(id, editModel, images);
 
             TempData["message"] = "You have succesfully edited your car.";
 
-            return this.RedirectToAction(nameof(AllCars));
+            return this.RedirectToAction("Details", new { id = id });
         }
 
         [HttpPost]
         public IActionResult Delete(int carId)
         {
-            if (this.cars.Delete(carId))
-            {
-                TempData["message"] = "You have successfully deleted your car!";
-            }
-            else
-            {
-                TempData["message"] = "You failed deleting your car!";
-            }
+            this.cars.Delete(carId);
 
             return RedirectToAction("AllCars");
         }

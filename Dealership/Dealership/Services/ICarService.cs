@@ -1,7 +1,7 @@
 ﻿namespace Dealership.Services
 {
     using Dealership.Data;
-    using Dealership.Data.Enums;
+    using Microsoft.AspNetCore.Http;
     using System.Collections.Generic;
 
     public interface ICarService
@@ -10,11 +10,11 @@
 
         IEnumerable<Car> Search(string searchQuery);
 
-        bool Add(string manufacturer, string model, short yearOfProduction, BodyType bodyType, Condition condition, TypeOfTransmission typeOfTransmission, EuroStandart euroStandart, EngineType engineType, int travelledDistance, short horsePower, string color, string saleDescription, decimal price, string imagesUrls);
+        void Add(Car addCarFormModel, ICollection<IFormFile> images);
 
-        bool Edit(int id, string manufacturer, string model, short yearOfProduction, BodyType bodyType, Condition condition, TypeOfTransmission typeOfTransmission, EuroStandart euroStandart, EngineType engineType, int travelledDistance, short horsePower, string color, string saleDescription, decimal price, string imagesUrls);
+        void Edit(int id, Car editCarFormModel, ICollection<IFormFile> images);
 
-        bool Delete(int IdToRemove);              
+        void Delete(int IdToRemove);              
 
         bool Exists(int id);   
 

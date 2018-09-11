@@ -1,4 +1,4 @@
-﻿@model CarCreateFormModel
+﻿@model Car
 
 @{
     ViewBag.Title = "Edit Car";
@@ -8,7 +8,7 @@
 
 <div class="row createForm">
     <div class="col-md-12">
-        <form method="post">
+        <form method="post" enctype="multipart/form-data">
             <div asp-validation-summary="All" class="text-danger"></div>
 
             <div class="left-create-car-part col-md-6">
@@ -63,10 +63,9 @@
                 </div>
 
                 <div class="form-group">
-                    <label class="create-car-labels" asp-for="Images"></label>
-                    <input asp-for="Images" class="form-control" />
-                    <span asp-validation-for="Images" class="text-danger"></span>
-                </div>
+                    <label class="create-car-labels">Images</label>
+                    <input name="images" type="file" multiple="multiple" class="form-control" />
+                </div>                
             </div>
 
             <div class="form-group">
@@ -100,8 +99,15 @@
             </div>
 
             <div class="create-car-btn col-md-12">
-                <button type="submit" class="btn btn-warning sell-car-btn">Edit Car</button>
+                <button type="submit" class="btn btn-warning sell-car-btn">Save Car</button>
             </div>
         </form>
+
+        <div>
+            @foreach (var image in Model.Images)
+            {
+                <img class="img-thumbnail img-responsive" src="~/images/@image.ImageUrl" />
+            }
+        </div>
     </div>
 </div>

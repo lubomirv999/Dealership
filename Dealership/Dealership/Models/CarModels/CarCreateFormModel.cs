@@ -2,6 +2,7 @@
 {
     using Dealership.Data.Enums;
     using Microsoft.AspNetCore.Http.Internal;
+    using System.Collections.Generic;
     using System.ComponentModel.DataAnnotations;
 
     public class CarCreateFormModel
@@ -22,7 +23,7 @@
 
         [Display(Name = "Body Type")]
         public BodyType BodyType { get; set; }
-        
+
         public Condition Condition { get; set; }
 
         [Display(Name = "Type Of Transmission")]
@@ -55,7 +56,5 @@
 
         [Range(0, double.MaxValue)]
         public decimal Price { get; set; }
-
-        public string Images { get; set; }
     }
 }

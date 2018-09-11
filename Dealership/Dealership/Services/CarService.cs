@@ -1,147 +1,109 @@
 ﻿namespace Dealership.Services
 {
     using Dealership.Data;
-    using Dealership.Data.Enums;
+    using Dealership.Models.CarViewModels;
+    using Microsoft.AspNetCore.Hosting;
+    using Microsoft.AspNetCore.Http;
     using Microsoft.EntityFrameworkCore;
+    using System;
     using System.Collections.Generic;
+    using System.IO;
     using System.Linq;
 
     public class CarService : ICarService
     {
+        private readonly IHostingEnvironment hostingEnvironment;
         private readonly DealershipDbContext db;
 
-        public CarService(DealershipDbContext db)
+        public CarService(IHostingEnvironment hostingEnvironment, DealershipDbContext db)
         {
+            this.hostingEnvironment = hostingEnvironment;
             this.db = db;
         }
 
-        public bool Add(string manufacturer, string model, short yearOfProduction, BodyType bodyType, Condition condition, TypeOfTransmission typeOfTransmission, EuroStandart euroStandart, EngineType engineType, int travelledDistance, short horsePower, string color, string saleDescription, decimal price, string imagesUrls)
+        public void Add(Car addCarModel, ICollection<IFormFile> images)
         {
-            try
+            List<Image> dataImages = new List<Image>();
+
+            foreach (var image in images)
             {
-                List<Image> images = new List<Image>();
-
-                var imagesCount = imagesUrls.Split(", ");
-
-                for (int i = 0; i < imagesCount.Length; i++)
+                if (image != null)
                 {
-                    Image image = new Image();
-                    image.ImageUrl = imagesCount[i];
-                    images.Add(image);
-                    this.db.Images.Add(image);
-                }
+                    var imgGuid = Guid.NewGuid();
+                    string img = Path.GetFileName(image.FileName);
+                    string imgMimeType = image.ContentType.Split("/").Last();
+                    string path = Path.Combine(hostingEnvironment.WebRootPath + "\\images", imgGuid.ToString() + "." + imgMimeType);
 
-                var car = new Car
-                {
-                    Manufacturer = manufacturer,
-                    Model = model,
-                    YearOfProduction = yearOfProduction,
-                    BodyType = bodyType,
-                    Condition = condition,
-                    TypeOfTransmission = typeOfTransmission,
-                    EuroStandart = euroStandart,
-                    EngineType = engineType,
-                    TravelledDistance = travelledDistance,
-                    HorsePower = horsePower,
-                    Color = color,
-                    SaleDescription = saleDescription,
-                    Price = price,
-                    Images = images
-                };
-
-                this.db.Cars.Add(car);
-                this.db.SaveChanges();
-
-                return true;
-            }
-            catch
-            {
-                return false;
-            }
-        }
-
-        public bool Edit(int id, string manufacturer, string model, short yearOfProduction, BodyType bodyType, Condition condition, TypeOfTransmission typeOfTransmission, EuroStandart euroStandart, EngineType engineType, int travelledDistance, short horsePower, string color, string saleDescription, decimal price, string imagesUrls)
-        {
-            try
-            {
-                if (!this.db.Cars.Any(p => p.Id == id))
-                {
-                    return false;
-                }
-
-                var car = this.db.Cars.Find(id);
-
-                if (car == null)
-                {
-                    return false;
-                }
-
-                List<Image> images = new List<Image>();
-
-                var imagesCount = imagesUrls.Split(", ");
-
-                for (int i = 0; i < imagesCount.Length; i++)
-                {
-                    Image image = new Image();
-                    image.ImageUrl = imagesCount[i];
-                    images.Add(image);
-
-                    foreach (var img in this.db.Images)
+                    using (var fs = new FileStream(path, FileMode.Create, FileAccess.Write))
                     {
-                        if (!(img.Id == image.Id))
-                        {
-                            this.db.Images.Add(image);
-                        }
+                        image.CopyTo(fs);
                     }
+
+                    var dataImg = new Image();
+                    dataImg.ImageUrl = imgGuid + "." + imgMimeType;
+                    dataImages.Add(dataImg);
                 }
-
-                car.Manufacturer = manufacturer;
-                car.Model = model;
-                car.YearOfProduction = yearOfProduction;
-                car.BodyType = bodyType;
-                car.Condition = condition;
-                car.TypeOfTransmission = typeOfTransmission;
-                car.EuroStandart = euroStandart;
-                car.EngineType = engineType;
-                car.TravelledDistance = travelledDistance;
-                car.HorsePower = horsePower;
-                car.Color = color;
-                car.SaleDescription = saleDescription;
-                car.Price = price;
-                car.Images = images;
-
-                this.db.SaveChanges();
-
-                return true;
             }
-            catch
-            {
-                return false;
-            }
+
+            this.db.Images.AddRange(dataImages);
+            addCarModel.Images = dataImages;
+
+            this.db.Cars.Add(addCarModel);
+            this.db.SaveChanges();
         }
 
-        public bool Delete(int carId)
+        public void Edit(int id, Car editCarModel, ICollection<IFormFile> images)
         {
-            try
+            var car = this.db.Cars.Find(id);
+
+            List<Image> dataImages = new List<Image>();
+
+            foreach (var image in images)
             {
-                Car carToDelete = db.Cars.FirstOrDefault(p => p.Id == carId);
-
-                if (carToDelete != null)
+                if (image != null)
                 {
-                    db.Cars.Remove(carToDelete);
-                    db.SaveChanges();
+                    var imgGuid = Guid.NewGuid();
+                    string img = Path.GetFileName(image.FileName);
+                    string imgMimeType = image.ContentType.Split("/").Last();
+                    string path = Path.Combine(hostingEnvironment.WebRootPath + "\\images", imgGuid.ToString() + "." + imgMimeType);
 
-                    return true;
-                }
-                else
-                {
-                    return false;
+                    using (var fs = new FileStream(path, FileMode.Create, FileAccess.Write))
+                    {
+                        image.CopyTo(fs);
+                    }
+
+                    var dataImg = new Image();
+                    dataImg.ImageUrl = imgGuid + "." + imgMimeType;
+                    dataImages.Add(dataImg);
                 }
             }
-            catch
-            {
-                return false;
-            }
+
+            this.db.Images.AddRange(dataImages);
+
+            car.Manufacturer = editCarModel.Manufacturer;
+            car.Model = editCarModel.Model;
+            car.YearOfProduction = editCarModel.YearOfProduction;
+            car.BodyType = editCarModel.BodyType;
+            car.Condition = editCarModel.Condition;
+            car.TypeOfTransmission = editCarModel.TypeOfTransmission;
+            car.EuroStandart = editCarModel.EuroStandart;
+            car.EngineType = editCarModel.EngineType;
+            car.TravelledDistance = editCarModel.TravelledDistance;
+            car.HorsePower = editCarModel.HorsePower;
+            car.Color = editCarModel.Color;
+            car.SaleDescription = editCarModel.SaleDescription;
+            car.Price = editCarModel.Price;
+            car.Images = dataImages;
+
+            this.db.SaveChanges();
+        }
+
+        public void Delete(int carId)
+        {
+            Car carToDelete = this.db.Cars.FirstOrDefault(p => p.Id == carId);
+
+            db.Cars.Remove(carToDelete);
+            db.SaveChanges();
         }
 
         public IEnumerable<Car> All()
@@ -161,7 +123,7 @@
 
         public IEnumerable<Car> Search(string searchQuery)
         {
-            if(string.IsNullOrEmpty(searchQuery))
+            if (string.IsNullOrEmpty(searchQuery))
             {
                 return All();
             }
