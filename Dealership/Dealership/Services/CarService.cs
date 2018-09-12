@@ -100,7 +100,14 @@
 
         public void Delete(int carId)
         {
-            Car carToDelete = this.db.Cars.FirstOrDefault(p => p.Id == carId);
+            Car carToDelete = this.db.Cars.Include("Images").FirstOrDefault(p => p.Id == carId);
+
+            foreach(var imageToDelete in carToDelete.Images)
+            {
+                string pathToDelete = hostingEnvironment.WebRootPath + "\\images\\" + imageToDelete.ImageUrl;
+
+                System.IO.File.Delete(pathToDelete);
+            }
 
             db.Cars.Remove(carToDelete);
             db.SaveChanges();
@@ -129,6 +136,18 @@
             }
 
             return this.db.Cars.Where(c => c.Manufacturer.Contains(searchQuery) || c.Model.Contains(searchQuery) || c.SaleDescription.Contains(searchQuery)).Include("Images");
+        }
+
+        public void DeletePhoto(int photoId)
+        {
+            Image imageToDelete = this.db.Images.FirstOrDefault(p => p.Id == photoId);
+
+            string pathToDelete = hostingEnvironment.WebRootPath + "\\images\\" + imageToDelete.ImageUrl;
+
+            System.IO.File.Delete(pathToDelete);
+
+            db.Images.Remove(imageToDelete);
+            db.SaveChanges();
         }
     }
 }

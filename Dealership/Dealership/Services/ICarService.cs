@@ -14,10 +14,13 @@
 
         void Edit(int id, Car editCarFormModel, ICollection<IFormFile> images);
 
-        void Delete(int IdToRemove);              
+        void Delete(int IdToRemove);
+
+        void DeletePhoto(int photoId);
 
         bool Exists(int id);   
 
         Car FindById(int id);
+
     }
 }

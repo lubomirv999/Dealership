@@ -78,6 +78,7 @@
 
             return this.View(new Car
             {
+                Id = car.Id,
                 Manufacturer = car.Manufacturer,
                 Model = car.Model,
                 YearOfProduction = car.YearOfProduction,
@@ -137,6 +138,14 @@
             Car car = this.cars.FindById(id);
 
             return View(car);
+        }
+
+        [HttpPost]
+        public IActionResult DeletePhoto(int photoId, int carId)
+        {
+            this.cars.DeletePhoto(photoId);
+
+            return this.RedirectToAction("Edit", new { id = carId });
         }
     }
 }
