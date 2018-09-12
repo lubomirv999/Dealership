@@ -8,6 +8,18 @@
 
 <h2>@TempData["message"]</h2>
 
+<form method="post" asp-action="SortCars">
+    <label class="create-car-labels">Sort</label>
+    <select name="sort">
+        <option value="manufacturer">Manufacturer</option>
+        <option value="condition">Condition</option>
+        <option value="year">Year</option>
+        <option value="priceAsc">Price ASC</option>
+        <option value="priceDesc">Price DESC</option>
+    </select>
+    <button type="submit" class="btn btn-primary sell-car-btn">Sort cars</button>
+</form>
+
 @if (Model.Cars.Any())
 {
     @foreach (var c in Model.Cars)
@@ -16,7 +28,14 @@
             <table class="table-responsive">
                 <tr>
                     <td class="col-xs-4 col-sm-3 col-md-6 col-lg-4">
-                        <img src="~/images/@c.Images.FirstOrDefault().ImageUrl" class="img-thumbnail img-responsive" />
+                        @if (c.Images.Count > 0)
+                        {
+                            <img src="~/images/@c.Images.FirstOrDefault().ImageUrl" class="img-thumbnail img-responsive" />
+                        }
+                        else
+                        {
+                            <span>@c.Manufacturer Photo</span>
+                        }
                     </td>
                     <td>
                         <div class="bg-faded p-1">
@@ -27,7 +46,7 @@
                                 </span>
                             </p>
                             <p id="car-all-info">Year: @(c.YearOfProduction) With: @(c.TravelledDistance) km. Color: @c.Color Condition: @(c.Condition)</p>
-                            <div id="actions-car-all">                                
+                            <div id="actions-car-all">
                                 <form asp-action="Delete" method="post">
                                     <input type="hidden" name="carId" value="@c.Id" />
                                     <button type="submit" class="btn btn-danger btn-sm delete-car-all-btn">
@@ -35,8 +54,8 @@
                                     </button>
                                 </form>
 
-                                <a class="btn btn-warning btn-md edit-car-all-btn" asp-controller="Car" asp-action="Edit" asp-route-id="@c.Id">Edit</a>                                
-                                <a class="btn btn-success btn-md detail-car-all-btn" asp-controller="Car" asp-action="Details" asp-route-id="@c.Id">Details</a>                                
+                                <a class="btn btn-warning btn-md edit-car-all-btn" asp-controller="Car" asp-action="Edit" asp-route-id="@c.Id">Edit</a>
+                                <a class="btn btn-success btn-md detail-car-all-btn" asp-controller="Car" asp-action="Details" asp-route-id="@c.Id">Details</a>
                             </div>
                         </div>
                     </td>

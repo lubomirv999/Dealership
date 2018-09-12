@@ -6,7 +6,7 @@
 
     public interface ICarService
     {
-        IEnumerable<Car> All();
+        IEnumerable<Car> All(string sort);
 
         IEnumerable<Car> Search(string searchQuery);
 

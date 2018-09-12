@@ -1,11 +1,8 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using Dealership.Data;
-
-namespace Dealership.Models
+﻿namespace Dealership.Models
 {
+    using Dealership.Data;
+    using System.Collections.Generic;
+
     public class CarListModel
     {
         public IEnumerable<Car> Cars { get; set; }

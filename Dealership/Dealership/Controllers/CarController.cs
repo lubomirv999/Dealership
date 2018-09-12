@@ -16,11 +16,20 @@
             this.cars = cars;
         }
 
-        public ViewResult AllCars()
+        public ViewResult AllCars(int? sort)
         {
             return View(new CarListModel
             {
-                Cars = this.cars.All()
+                Cars = this.cars.All(null)
+            });
+        }
+
+        [HttpPost]
+        public ViewResult SortCars(string sort)
+        {
+            return View("AllCars", new CarListModel
+            {
+                Cars = this.cars.All(sort)
             });
         }
 
