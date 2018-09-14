@@ -127,10 +127,9 @@
             return this.RedirectToAction("Details", new { id = id });
         }
 
-        [HttpPost]
-        public IActionResult Delete(int carId)
+        public IActionResult Delete(int id)
         {
-            this.cars.Delete(carId);
+            this.cars.Delete(id);
 
             return RedirectToAction("AllCars");
         }
@@ -148,13 +147,11 @@
 
             return View(car);
         }
-
+        
         [HttpPost]
-        public IActionResult DeletePhoto(int photoId, int carId)
+        public void DeletePhoto(int photoId)
         {
             this.cars.DeletePhoto(photoId);
-
-            return this.RedirectToAction("Edit", new { id = carId });
         }
     }
 }

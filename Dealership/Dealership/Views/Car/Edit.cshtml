@@ -108,19 +108,16 @@
             {
                 @foreach (var image in Model.Images)
                 {
-                    <div class="well well-lg">
+                    <div class="well well-lg image-ctr">
                         <img class="img-thumbnail img-responsive" src="~/images/@image.ImageUrl" />
 
-                        <form asp-action="DeletePhoto" method="post">
-                            <input type="hidden" name="photoId" value="@image.Id" />
-                            <input type="hidden" name="carId" value="@Model.Id" />
-                            <button type="submit" class="btn btn-danger btn-sm delete-car-all-btn">
-                                Delete photo
-                            </button>
-                        </form>
+                        <button data-photoId="@image.Id" class="btn btn-danger btn-md delete-car-all-btn">Delete</button>
                     </div>
                 }
             }
         </div>
     </div>
 </div>
+
+<script src="~/lib/jquery/dist/jquery.js"></script>
+<script src="~/js/delete-car-photo.js"></script>
