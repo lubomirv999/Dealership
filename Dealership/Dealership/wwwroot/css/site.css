@@ -213,6 +213,15 @@ input[type=text]:focus, textarea:focus {
     padding: 30px 10px;
 }
 
+/*
+    Pagination Disabled Btns
+*/
+
+.disabled {
+    pointer-events: none;
+    cursor: default;
+}
+
 footer{
     text-align: center;
     font-size: 1.3em;

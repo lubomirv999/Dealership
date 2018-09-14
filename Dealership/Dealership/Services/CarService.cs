@@ -112,22 +112,45 @@
             db.SaveChanges();
         }
 
-        public IEnumerable<Car> All(string sort)
+        public IEnumerable<Car> All(string sort, int page = 1, int pageSize = 6)
         {
             switch (sort)
             {
-                case "manufacturer":
-                    return this.db.Cars.OrderBy(c => c.Manufacturer).Include("Images");
-                case "condition":
-                    return this.db.Cars.OrderBy(c => c.Condition).Include("Images");
-                case "year":
-                    return this.db.Cars.OrderBy(c => c.YearOfProduction).Include("Images");
-                case "priceAsc":
-                    return this.db.Cars.OrderBy(c => c.Price).Include("Images");
-                case "priceDesc":
-                    return this.db.Cars.OrderByDescending(c => c.Price).Include("Images");
+                case "Manufacturer":
+                    return this.db.Cars
+                        .OrderBy(c => c.Manufacturer)
+                        .Skip((page - 1) * pageSize)
+                        .Take(pageSize)
+                        .Include("Images");
+                case "Condition":
+                    return this.db.Cars
+                        .OrderBy(c => c.Condition)
+                        .Skip((page - 1) * pageSize)
+                        .Take(pageSize)
+                        .Include("Images");
+                case "Year":
+                    return this.db.Cars
+                        .OrderBy(c => c.YearOfProduction)
+                        .Skip((page - 1) * pageSize)
+                        .Take(pageSize)
+                        .Include("Images");
+                case "Price Asc":
+                    return this.db.Cars
+                        .OrderBy(c => c.Price)
+                        .Skip((page - 1) * pageSize)
+                        .Take(pageSize)
+                        .Include("Images");
+                case "Price Desc":
+                    return this.db.Cars
+                        .OrderByDescending(c => c.Price)
+                        .Skip((page - 1) * pageSize)
+                        .Take(pageSize)
+                        .Include("Images");
                 default:
-                    return this.db.Cars.Include("Images");
+                    return this.db.Cars
+                        .Skip((page - 1) * pageSize)
+                        .Take(pageSize)
+                        .Include("Images");
             }
         }
 
@@ -141,14 +164,20 @@
         public bool Exists(int id)
             => this.db.Cars.Any(c => c.Id == id);
 
-        public IEnumerable<Car> Search(string searchQuery)
+        public IEnumerable<Car> Search(string searchQuery, int page = 1, int pageSize = 6)
         {
             if (string.IsNullOrEmpty(searchQuery))
             {
                 return All(null);
             }
 
-            return this.db.Cars.Where(c => c.Manufacturer.Contains(searchQuery) || c.Model.Contains(searchQuery) || c.SaleDescription.Contains(searchQuery)).Include("Images");
+            return this.db.Cars
+                .Where(c =>
+                c.Manufacturer.Contains(searchQuery)
+                || c.Model.Contains(searchQuery)
+                || c.SaleDescription.Contains(searchQuery))
+                .Skip((page - 1) * pageSize)
+                .Take(pageSize).Include("Images");
         }
 
         public void DeletePhoto(int photoId)
@@ -161,6 +190,11 @@
 
             db.Images.Remove(imageToDelete);
             db.SaveChanges();
+        }
+
+        public int Total()
+        {
+            return this.db.Cars.Count();
         }
     }
 }

@@ -5,10 +5,13 @@
     using Dealership.Services;
     using Microsoft.AspNetCore.Http;
     using Microsoft.AspNetCore.Mvc;
+    using System;
     using System.Collections.Generic;
 
     public class CarController : Controller
     {
+        private const int PageSize = 6;
+
         private readonly ICarService cars;
 
         public CarController(ICarService cars)
@@ -16,20 +19,27 @@
             this.cars = cars;
         }
 
-        public ViewResult AllCars(int? sort)
+        public ViewResult AllCars(string sort, int page = 1, int pageSize = 6)
         {
+            ViewBag.SortType = sort;
+
             return View(new CarListModel
             {
-                Cars = this.cars.All(null)
+                Cars = this.cars.All(sort, page, pageSize),
+                CurrentPage = page,
+                TotalPages = (int)Math.Ceiling(this.cars.Total() / (double)PageSize)
             });
         }
 
-        [HttpPost]
-        public ViewResult SortCars(string sort)
+        public ViewResult SortCars(string sort, int page = 1, int pageSize = 6)
         {
+            ViewBag.SortType = sort;
+
             return View("AllCars", new CarListModel
             {
-                Cars = this.cars.All(sort)
+                Cars = this.cars.All(sort, page, pageSize),
+                CurrentPage = page,
+                TotalPages = (int)Math.Ceiling(this.cars.Total() / (double)PageSize)
             });
         }
 
