@@ -7,6 +7,7 @@
     using Microsoft.AspNetCore.Mvc;
     using System;
     using System.Collections.Generic;
+    using System.Linq;
 
     public class CarController : Controller
     {
@@ -19,36 +20,17 @@
             this.cars = cars;
         }
 
-        public ViewResult AllCars(string sort, int page = 1, int pageSize = 6)
+        public IActionResult AllCars(string sort, string searchQuery, int page = 1, int pageSize = 6)
         {
-            ViewBag.SortType = sort;
-
-            return View(new CarListModel
-            {
-                Cars = this.cars.All(sort, page, pageSize),
-                CurrentPage = page,
-                TotalPages = (int)Math.Ceiling(this.cars.Total() / (double)PageSize)
-            });
-        }
-
-        public ViewResult SortCars(string sort, int page = 1, int pageSize = 6)
-        {
-            ViewBag.SortType = sort;
+            ViewBag.SearchQuery = searchQuery;
 
             return View("AllCars", new CarListModel
             {
-                Cars = this.cars.All(sort, page, pageSize),
+                Cars = this.cars.All(sort, searchQuery, page, pageSize),
                 CurrentPage = page,
-                TotalPages = (int)Math.Ceiling(this.cars.Total() / (double)PageSize)
-            });
-        }
-
-        [HttpPost]
-        public ViewResult AllCars(string searchQuery)
-        {
-            return View(new CarListModel
-            {
-                Cars = this.cars.Search(searchQuery)
+                TotalPages = (int)Math.Ceiling(this.cars.SearchCars(searchQuery).Count() / (double)PageSize),
+                SearchQuery = searchQuery,
+                Sort = sort
             });
         }
 

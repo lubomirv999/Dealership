@@ -44,7 +44,6 @@
                 }
             }
 
-            //this.db.Images.AddRange(dataImages);
             carEntity.Images = dataImages;
 
             this.db.Cars.Add(carEntity);
@@ -76,8 +75,6 @@
                     dataImages.Add(dataImg);
                 }
             }
-
-            //this.db.Images.AddRange(dataImages);
 
             car.Manufacturer = carEntity.Manufacturer;
             car.Model = carEntity.Model;
@@ -112,73 +109,70 @@
             db.SaveChanges();
         }
 
-        public IEnumerable<Car> All(string sort, int page = 1, int pageSize = 6)
+        public IEnumerable<Car> All(string sort, string searchQuery, int page = 1, int pageSize = 6)
         {
+            var searchedCars = SearchCars(searchQuery);
+
             switch (sort)
             {
                 case "Manufacturer":
-                    return this.db.Cars
+                    return searchedCars
                         .OrderBy(c => c.Manufacturer)
                         .Skip((page - 1) * pageSize)
-                        .Take(pageSize)
-                        .Include("Images");
+                        .Take(pageSize);
+
                 case "Condition":
-                    return this.db.Cars
+                    return searchedCars
                         .OrderBy(c => c.Condition)
                         .Skip((page - 1) * pageSize)
-                        .Take(pageSize)
-                        .Include("Images");
+                        .Take(pageSize);
                 case "Year":
-                    return this.db.Cars
+                    return searchedCars
                         .OrderBy(c => c.YearOfProduction)
                         .Skip((page - 1) * pageSize)
-                        .Take(pageSize)
-                        .Include("Images");
+                        .Take(pageSize);
                 case "Price Asc":
-                    return this.db.Cars
+                    return searchedCars
                         .OrderBy(c => c.Price)
                         .Skip((page - 1) * pageSize)
-                        .Take(pageSize)
-                        .Include("Images");
+                        .Take(pageSize);
                 case "Price Desc":
-                    return this.db.Cars
+                    return searchedCars
                         .OrderByDescending(c => c.Price)
                         .Skip((page - 1) * pageSize)
-                        .Take(pageSize)
-                        .Include("Images");
+                        .Take(pageSize);
                 default:
-                    return this.db.Cars
+                    return searchedCars
                         .Skip((page - 1) * pageSize)
-                        .Take(pageSize)
-                        .Include("Images");
+                        .Take(pageSize);
+            }
+        }
+
+        public IEnumerable<Car> SearchCars(string searchQuery)
+        {
+            if (!string.IsNullOrEmpty(searchQuery))
+            {
+                return this.db.Cars.Where(c =>
+                    c.Manufacturer.Contains(searchQuery)
+                    || c.Model.Contains(searchQuery)
+                    || c.SaleDescription.Contains(searchQuery))
+                    .Include("Images");
+            }
+            else
+            {
+                return this.db.Cars.Include("Images"); ;
             }
         }
 
         public Car FindById(int id)
-            => this.db
-                .Cars
-                .Include("Images")
-                .Where(c => c.Id == id)
-                .FirstOrDefault();
+                => this.db
+                    .Cars
+                    .Include("Images")
+                    .Where(c => c.Id == id)
+                    .FirstOrDefault();
 
         public bool Exists(int id)
             => this.db.Cars.Any(c => c.Id == id);
-
-        public IEnumerable<Car> Search(string searchQuery, int page = 1, int pageSize = 6)
-        {
-            if (string.IsNullOrEmpty(searchQuery))
-            {
-                return All(null);
-            }
-
-            return this.db.Cars
-                .Where(c =>
-                c.Manufacturer.Contains(searchQuery)
-                || c.Model.Contains(searchQuery)
-                || c.SaleDescription.Contains(searchQuery))
-                .Skip((page - 1) * pageSize)
-                .Take(pageSize).Include("Images");
-        }
 
         public void DeletePhoto(int photoId)
         {
@@ -192,9 +186,9 @@
             db.SaveChanges();
         }
 
-        public int Total()
-        {
-            return this.db.Cars.Count();
-        }
+        //public int Total()
+        //{
+        //    return this.db.Cars.Count();
+        //}
     }
 }

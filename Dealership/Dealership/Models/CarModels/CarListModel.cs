@@ -18,5 +18,9 @@
         public int NextPage => this.CurrentPage == this.TotalPages
             ? this.TotalPages
             : this.CurrentPage + 1;
+
+        public string SearchQuery { get; set; }
+
+        public string Sort { get; set; }
     }
 }
