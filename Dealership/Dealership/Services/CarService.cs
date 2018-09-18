@@ -1,6 +1,7 @@
 ﻿namespace Dealership.Services
 {
     using Dealership.Data;
+    using Dealership.Models.CarModels;
     using Microsoft.AspNetCore.Hosting;
     using Microsoft.AspNetCore.Http;
     using Microsoft.EntityFrameworkCore;
@@ -8,6 +9,7 @@
     using System.Collections.Generic;
     using System.IO;
     using System.Linq;
+    using System.Net.Mail;
 
     public class CarService : ICarService
     {
@@ -148,6 +150,28 @@
             }
         }
 
+        public void SendEMail(BuyCarFormModel personInfo, Car carToBuy)
+        {
+            string id = "lvdealership@gmail.com";
+            string password = "LVDealership123";
+
+            SmtpClient client = new SmtpClient
+            {
+                Host = "smtp.gmail.com",
+                Port = 587,
+                EnableSsl = true,
+                DeliveryMethod = SmtpDeliveryMethod.Network,
+                Credentials = new System.Net.NetworkCredential(id, password),
+                Timeout = 10000,
+            };
+
+            MailMessage mm = new MailMessage(id, id, carToBuy.Manufacturer + " " + carToBuy.Model + " with id #" + carToBuy.Id,
+                "person with name " + personInfo.FirstName + " " + personInfo.LastName + " wants to buy car #" + carToBuy.Id + "(" + carToBuy.Manufacturer + " " + carToBuy.Model + "). Contact him on phone : " + personInfo.GSM + " or email : " + personInfo.Email
+                + " and comment: " + personInfo.Comment);
+
+            client.Send(mm);
+        }
+
         public IEnumerable<Car> SearchCars(string searchQuery)
         {
             if (!string.IsNullOrEmpty(searchQuery))
@@ -185,10 +209,5 @@
             db.Images.Remove(imageToDelete);
             db.SaveChanges();
         }
-
-        //public int Total()
-        //{
-        //    return this.db.Cars.Count();
-        //}
     }
 }

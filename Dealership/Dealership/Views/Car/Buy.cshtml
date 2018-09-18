@@ -1,0 +1,52 @@
+﻿@model BuyCarFormModel
+@{
+    ViewBag.Title = "Buy Car";
+}
+<h2 id="sellCarHeading">Give us your info, and we will contact you as soon as possible</h2>
+
+<div class="row createForm">
+    <div class="col-md-12">
+        <form method="post">
+            <div asp-validation-summary="All" class="text-danger"></div>
+            <div class="left-create-car-part col-md-6">
+                <input asp-for="CarToBuyId" hidden />
+
+                <div class="form-group">
+                    <label class="create-car-labels" asp-for="FirstName"></label>
+                    <input asp-for="FirstName" class="form-control" />
+                    <span asp-validation-for="FirstName" class="text-danger"></span>
+                </div>
+
+                <div class="form-group">
+                    <label class="create-car-labels" asp-for="LastName"></label>
+                    <input asp-for="LastName" class="form-control" />
+                    <span asp-validation-for="LastName" class="text-danger"></span>
+                </div>
+
+                <div class="form-group">
+                    <label class="create-car-labels" asp-for="Email"></label>
+                    <input asp-for="Email" class="form-control" />
+                    <span asp-validation-for="Email" class="text-danger"></span>
+                </div>
+
+                <div class="form-group">
+                    <label class="create-car-labels" asp-for="GSM"></label>
+                    <input asp-for="GSM" class="form-control" />
+                    <span asp-validation-for="GSM" class="text-danger"></span>
+                </div>
+            </div>
+
+            <div class="right-create-car-part col-md-6">
+                <div class="form-group">
+                    <label class="create-car-labels" asp-for="Comment"></label>
+                    <input asp-for="Comment" class="form-control" />
+                    <span asp-validation-for="Comment" class="text-danger"></span>
+                </div>
+            </div>
+
+            <div class="create-car-btn col-md-12">
+                <button type="submit" class="btn btn-warning sell-car-btn">Buy Car</button>
+            </div>
+        </form>
+    </div>
+</div>

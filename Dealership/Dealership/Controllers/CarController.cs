@@ -2,6 +2,7 @@
 {
     using Dealership.Data;
     using Dealership.Models;
+    using Dealership.Models.CarModels;
     using Dealership.Services;
     using Microsoft.AspNetCore.Http;
     using Microsoft.AspNetCore.Mvc;
@@ -32,6 +33,20 @@
                 SearchQuery = searchQuery,
                 Sort = sort
             });
+        }
+
+        public IActionResult Buy(int id)
+        {
+            return View("Buy", new BuyCarFormModel { CarToBuyId = id });
+        }
+
+        [HttpPost]
+        public IActionResult Buy(BuyCarFormModel PersonToSend)
+        {
+            Car carToBuy = cars.FindById(PersonToSend.CarToBuyId);
+
+            this.cars.SendEMail(PersonToSend, carToBuy);
+            return View("Thanks");
         }
 
         public IActionResult Create() => View();

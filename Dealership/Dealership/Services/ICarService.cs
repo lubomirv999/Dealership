@@ -1,12 +1,15 @@
 ﻿namespace Dealership.Services
 {
     using Dealership.Data;
+    using Dealership.Models.CarModels;
     using Microsoft.AspNetCore.Http;
     using System.Collections.Generic;
 
     public interface ICarService
     {
         IEnumerable<Car> All(string sort, string searchQuery, int page = 1, int pageSize = 6);
+
+        void SendEMail(BuyCarFormModel personInfo, Car carToBuy);
 
         void Add(Car addCarFormModel, ICollection<IFormFile> images);
 
