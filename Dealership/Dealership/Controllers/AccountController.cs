@@ -61,7 +61,7 @@
                 if (result.Succeeded)
                 {
                     _logger.LogInformation("User logged in.");
-                    return RedirectToLocal(returnUrl);
+                    return RedirectToAction("AllCars", "Car");
                 }
                 if (result.RequiresTwoFactor)
                 {
@@ -228,7 +228,7 @@
 
                     await _signInManager.SignInAsync(user, isPersistent: false);
                     _logger.LogInformation("User created a new account with password.");
-                    return RedirectToLocal(returnUrl);
+                    return RedirectToAction("AllCars", "Car");
                 }
                 AddErrors(result);
             }
@@ -243,7 +243,7 @@
         {
             await _signInManager.SignOutAsync();
             _logger.LogInformation("User logged out.");
-            return RedirectToAction(nameof(HomeController.Index), "Home");
+            return RedirectToAction("AllCars", "Car");
         }
 
         [HttpPost]

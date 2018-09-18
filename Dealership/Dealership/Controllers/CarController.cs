@@ -4,6 +4,7 @@
     using Dealership.Models;
     using Dealership.Models.CarModels;
     using Dealership.Services;
+    using Microsoft.AspNetCore.Authorization;
     using Microsoft.AspNetCore.Http;
     using Microsoft.AspNetCore.Mvc;
     using System;
@@ -49,9 +50,11 @@
             return View("Thanks");
         }
 
+        [Authorize]
         public IActionResult Create() => View();
 
         [HttpPost]
+        [Authorize]
         public IActionResult Create(Car addCarModel, ICollection<IFormFile> images)
         {
             if (!ModelState.IsValid)
@@ -83,6 +86,7 @@
             return this.RedirectToAction("AllCars");
         }
 
+        [Authorize]
         public IActionResult Edit(int id)
         {
             var car = this.cars.FindById(id);
@@ -113,6 +117,7 @@
         }
 
         [HttpPost]
+        [Authorize]
         public IActionResult Edit(int id, Car editModel, ICollection<IFormFile> images)
         {
             if (!ModelState.IsValid)
@@ -134,6 +139,7 @@
             return this.RedirectToAction("Details", new { id = id });
         }
 
+        [Authorize]
         public IActionResult Delete(int id)
         {
             this.cars.Delete(id);
@@ -156,6 +162,7 @@
         }
         
         [HttpPost]
+        [Authorize]
         public void DeletePhoto(int photoId)
         {
             this.cars.DeletePhoto(photoId);

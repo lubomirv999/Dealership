@@ -56,8 +56,11 @@
                             </p>
                             <p id="car-all-info">Year: @(c.YearOfProduction) With: @(c.TravelledDistance) km. Color: @c.Color Condition: @(c.Condition)</p>
                             <div id="actions-car-all">
-                                <a class="btn btn-danger btn-md delete-car-all-btn" asp-controller="Car" asp-action="Delete" asp-route-id="@c.Id">Delete</a>
-                                <a class="btn btn-warning btn-md edit-car-all-btn" asp-controller="Car" asp-action="Edit" asp-route-id="@c.Id">Edit</a>
+                                @if (User.Identity.IsAuthenticated)
+                                {
+                                    <a class="btn btn-danger btn-md delete-car-all-btn" asp-controller="Car" asp-action="Delete" asp-route-id="@c.Id">Delete</a>
+                                    <a class="btn btn-warning btn-md edit-car-all-btn" asp-controller="Car" asp-action="Edit" asp-route-id="@c.Id">Edit</a>
+                                }
                                 <a class="btn btn-success btn-md detail-car-all-btn" asp-controller="Car" asp-action="Details" asp-route-id="@c.Id">Details</a>
                             </div>
                         </div>

@@ -222,6 +222,24 @@ input[type=text]:focus, textarea:focus {
     cursor: default;
 }
 
+/*
+    Logout Btn
+*/
+
+.logout-btn {
+    background: none;
+    border: none;
+    border-radius: 5px;
+    font-size: 1.1em;
+    color: white;
+    padding: 15px 15px 14px 15px;
+}
+
+.logout-btn:hover{
+    background-color: white;
+    color: dodgerblue;
+}
+
 footer{
     text-align: center;
     font-size: 1.3em;
