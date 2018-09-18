@@ -13,7 +13,7 @@
     var nextDisabled = Model.CurrentPage == Model.TotalPages ? "disabled" : string.Empty;
 }
 
-<form asp-route-searchQuery="@Model.SearchQuery">
+<form>
     <label class="create-car-labels">Sort by</label>
     <select name="sort">
         <option selected disabled>
@@ -25,6 +25,7 @@
         <option value="Price Asc">Price Asc</option>
         <option value="Price Desc">Price Desc</option>
     </select>
+    <input type="text" name="searchQuery" value="@Model.SearchQuery" hidden />
     <button class="btn btn-primary sell-car-btn">Sort cars</button>
 </form>
 
