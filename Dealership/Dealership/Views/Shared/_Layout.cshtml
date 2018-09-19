@@ -31,9 +31,13 @@
             <div class="navbar-collapse collapse">
                 <ul class="nav navbar-nav">
                     <li class="nav-links"><a asp-area="" asp-controller="Car" asp-action="AllCars">Home</a></li>
-                    <li class="nav-links"><a asp-area="" asp-controller="Home" asp-action="About">About</a></li>
-                    <li class="nav-links"><a asp-area="" asp-controller="Home" asp-action="Contact">Contact</a></li>
-                    <li class="nav-links"><a asp-area="" asp-controller="Car" asp-action="Create">Sell Car</a></li>
+
+                    @if (User.Identity.IsAuthenticated)
+                    {
+                        <li class="nav-links"><a asp-area="" asp-controller="Car" asp-action="Create">Sell Car</a></li>
+                        <li class="nav-links"><a asp-area="" asp-controller="Account" asp-action="Register">New Admin</a></li>
+                    }
+                    
                     <li class="nav-links">
                         <div class="search">
                             <form class="form-inline active-cyan-4">
@@ -42,7 +46,7 @@
                             </form>
                         </div>
                     </li>
-</ul>
+                </ul>
                 @await Html.PartialAsync("_LoginPartial")
             </div>
         </div>
@@ -50,9 +54,9 @@
     <div class="container body-content">
         @RenderBody()
     </div>
-        <footer>
-            <p>&copy; 2018 - Dealership</p>
-        </footer>
+    <footer>
+        <p>&copy; 2018 - Dealership</p>
+    </footer>
 
 
     <environment include="Development">

@@ -39,7 +39,7 @@
                     <td class="col-xs-4 col-sm-3 col-md-6 col-lg-4">
                         @if (c.Images.Count > 0)
                         {
-                            <img src="~/images/@c.Images.FirstOrDefault().ImageUrl" class="img-thumbnail img-responsive" />
+                            <img src="~/images/@c.Images.FirstOrDefault().ImageUrl" alt="@(c.Manufacturer + " " + c.Model)" class="img-thumbnail img-responsive" />
                         }
                         else
                         {
@@ -50,6 +50,10 @@
                         <div class="bg-faded p-1">
                             <p id="car-all-headings">
                                 <span id="manufacturer-all">@c.Manufacturer</span><span>@c.Model</span>
+                                @if (User.Identity.IsAuthenticated)
+                                {
+                                    <span>#Id - @c.Id</span>
+                                }
                                 <span class="car-all-price" style="float:right">
                                     @c.Price &euro;
                                 </span>
