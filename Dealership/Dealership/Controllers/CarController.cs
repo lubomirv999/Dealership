@@ -15,11 +15,11 @@
     {
         private const int PageSize = 6;
 
-        private readonly ICarService cars;
+        private readonly ICarService carsService;
 
-        public CarController(ICarService cars)
+        public CarController(ICarService carsService)
         {
-            this.cars = cars;
+            this.carsService = carsService;
         }
 
         public IActionResult AllCars(string sort, string searchQuery, int page = 1, int pageSize = 6)
@@ -28,9 +28,9 @@
 
             return View("AllCars", new CarListModel
             {
-                Cars = this.cars.All(sort, searchQuery, page, pageSize),
+                Cars = this.carsService.All(sort, searchQuery, page, pageSize),
                 CurrentPage = page,
-                TotalPages = (int)Math.Ceiling(this.cars.SearchCars(searchQuery).Count() / (double)PageSize),
+                TotalPages = (int)Math.Ceiling(this.carsService.SearchCars(searchQuery).Count() / (double)PageSize),
                 SearchQuery = searchQuery,
                 Sort = sort
             });
@@ -44,9 +44,14 @@
         [HttpPost]
         public IActionResult Buy(BuyCarFormModel PersonToSend)
         {
-            Car carToBuy = cars.FindById(PersonToSend.CarToBuyId);
+            if (!ModelState.IsValid)
+            {
+                return this.View("Buy", PersonToSend);
+            }
 
-            this.cars.SendEMail(PersonToSend, carToBuy);
+            Car carToBuy = carsService.FindById(PersonToSend.CarToBuyId);
+
+            this.carsService.SendEMail(PersonToSend, carToBuy);
             return View("Thanks");
         }
 
@@ -79,7 +84,7 @@
                 Price = addCarModel.Price
             };
 
-            this.cars.Add(addCarModel, images);
+            this.carsService.Add(addCarModel, images);
 
             TempData["message"] = "You have succesfully added your car for sale.";
 
@@ -89,7 +94,7 @@
         [Authorize]
         public IActionResult Edit(int id)
         {
-            var car = this.cars.FindById(id);
+            var car = this.carsService.FindById(id);
 
             if (car == null)
             {
@@ -125,14 +130,14 @@
                 return this.View(editModel);
             }
 
-            var carExists = this.cars.Exists(id);
+            var carExists = this.carsService.Exists(id);
 
             if (!carExists)
             {
                 return NotFound();
             }
 
-            this.cars.Edit(id, editModel, images);
+            this.carsService.Edit(id, editModel, images);
 
             TempData["message"] = "You have succesfully edited your car.";
 
@@ -142,21 +147,21 @@
         [Authorize]
         public IActionResult Delete(int id)
         {
-            this.cars.Delete(id);
+            this.carsService.Delete(id);
 
             return RedirectToAction("AllCars");
         }
 
         public IActionResult Details(int id)
         {
-            var carExists = this.cars.Exists(id);
+            var carExists = this.carsService.Exists(id);
 
             if (!carExists)
             {
                 return NotFound();
             }
 
-            Car car = this.cars.FindById(id);
+            Car car = this.carsService.FindById(id);
 
             return View(car);
         }
@@ -165,7 +170,7 @@
         [Authorize]
         public void DeletePhoto(int photoId)
         {
-            this.cars.DeletePhoto(photoId);
+            this.carsService.DeletePhoto(photoId);
         }
     }
 }

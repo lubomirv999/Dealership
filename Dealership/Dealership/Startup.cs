@@ -9,17 +9,12 @@
     using Microsoft.EntityFrameworkCore;
     using Microsoft.Extensions.Configuration;
     using Microsoft.Extensions.DependencyInjection;
-    using System;
 
     public class Startup
     {
-        private static NLog.Logger logger = NLog.LogManager.GetCurrentClassLogger();
-
         public Startup(IConfiguration configuration)
         {
             Configuration = configuration;
-
-            logger.Info("Project started at: " + DateTime.UtcNow);
         }      
 
         public IConfiguration Configuration { get; }
@@ -35,7 +30,6 @@
                 .AddDefaultTokenProviders();
 
             // Add application services.
-            services.AddTransient<IEmailSender, EmailSender>();
             services.AddTransient<ICarService, CarService>();
 
             services.AddMvc();

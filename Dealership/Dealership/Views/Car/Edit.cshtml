@@ -103,13 +103,13 @@
             </div>
         </form>
 
-        <div class="jumbotron">
+        <div class="col-md-12">
             @if (Model.Images.Count > 0)
             {
                 @foreach (var image in Model.Images)
                 {
-                    <div class="well well-lg image-ctr">
-                        <img class="img-thumbnail img-responsive" src="~/images/@image.ImageUrl" />
+                    <div class="well well-lg image-ctr col-md-4 clearfix">
+                        <img class="img-thumbnail img-responsive img-edit" src="~/images/@image.ImageUrl" />
 
                         <button data-photoId="@image.Id" class="btn btn-danger btn-md delete-car-all-btn">Delete</button>
                     </div>

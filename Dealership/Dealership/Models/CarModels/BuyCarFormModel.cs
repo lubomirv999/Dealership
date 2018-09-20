@@ -21,13 +21,15 @@
         [Required]
         [MinLength(2)]
         [MaxLength(50)]
-        [Display(Name = "E-Mail")]
+        [EmailAddress]
+        [Display(Name = "E-Mail")]        
         public string Email { get; set; }
 
         [Required]
         [MinLength(2)]
         [MaxLength(50)]
-        [Display(Name = "GSM for Contact")]
+        [Phone]
+        [Display(Name = "GSM for Contact")]       
         public string GSM { get; set; }
 
         [Required]

@@ -4,27 +4,47 @@
     ViewBag.Title = "All Cars";
 }
 
-<h2 id="sellCarHeading">See all cars here</h2>
-
-<h2>@TempData["message"]</h2>
-
 @{
     var previousDisabled = Model.CurrentPage == 1 ? "disabled" : string.Empty;
     var nextDisabled = Model.CurrentPage == Model.TotalPages ? "disabled" : string.Empty;
 }
 
+<div class="sub-banner">
+    <div class="overlay">
+        <div class="container">
+            <div class="row">
+                <div class="col-md-12">
+                    <div class="breadcrumb-area">
+                        <h2>Cars in our catalog</h2>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<h2>@TempData["message"]</h2>
+
 <form>
-    <label class="create-car-labels">Sort by</label>
-    <select name="sort">
-        <option selected disabled>
-            @Model.Sort
-        </option>
-        <option value="Manufacturer">Manufacturer</option>
-        <option value="Condition">Condition</option>
-        <option value="Year">Year</option>
-        <option value="Price Asc">Price Asc</option>
-        <option value="Price Desc">Price Desc</option>
-    </select>
+    <span class="custom-dropdown big">
+        <select name="sort">
+            <option selected disabled>
+                @if (Model.Sort == "Manufacturer" || Model.Sort == "Condition" || Model.Sort == "Year" || Model.Sort == "Price Asc" || Model.Sort == "Price Desc")
+                {
+                    @Model.Sort
+                }
+                else
+                {
+                    <span class="disabled-sort">Sort By</span>
+                }
+            </option>
+            <option value="Manufacturer">Manufacturer</option>
+            <option value="Condition">Condition</option>
+            <option value="Year">Year</option>
+            <option value="Price Asc">Price Asc</option>
+            <option value="Price Desc">Price Desc</option>
+        </select>
+    </span>    
     <input type="text" name="searchQuery" value="@Model.SearchQuery" hidden />
     <button class="btn btn-primary sell-car-btn">Sort cars</button>
 </form>
@@ -33,88 +53,116 @@
 {
     @foreach (var c in Model.Cars)
     {
-        <div class="well col-xs-12 col-sm-12col-md-12 col-lg-12 center-block car-all">
-            <table class="table-responsive">
-                <tr>
-                    <td class="col-xs-4 col-sm-3 col-md-6 col-lg-4">
-                        @if (c.Images.Count > 0)
-                        {
-                            <img src="~/images/@c.Images.FirstOrDefault().ImageUrl" alt="@(c.Manufacturer + " " + c.Model)" class="img-thumbnail img-responsive" />
-                        }
-                        else
-                        {
-                            <span>@c.Manufacturer Photo</span>
-                        }
-                    </td>
-                    <td>
-                        <div class="bg-faded p-1">
-                            <p id="car-all-headings">
-                                <span id="manufacturer-all">@c.Manufacturer</span><span>@c.Model</span>
-                                @if (User.Identity.IsAuthenticated)
-                                {
-                                    <span>#Id - @c.Id</span>
-                                }
-                                <span class="car-all-price" style="float:right">
-                                    @c.Price &euro;
-                                </span>
-                            </p>
-                            <p id="car-all-info">Year: @(c.YearOfProduction) With: @(c.TravelledDistance) km. Color: @c.Color Condition: @(c.Condition)</p>
-                            <div id="actions-car-all">
-                                @if (User.Identity.IsAuthenticated)
-                                {
-                                    <a class="btn btn-danger btn-md delete-car-all-btn" asp-controller="Car" asp-action="Delete" asp-route-id="@c.Id">Delete</a>
-                                    <a class="btn btn-warning btn-md edit-car-all-btn" asp-controller="Car" asp-action="Edit" asp-route-id="@c.Id">Edit</a>
-                                }
-                                <a class="btn btn-success btn-md detail-car-all-btn" asp-controller="Car" asp-action="Details" asp-route-id="@c.Id">Details</a>
-                            </div>
-                        </div>
-                    </td>
-                </tr>
-            </table>
+        <div class="col-lg-4 col-md-4 col-sm-6 col-xs-12 wow fadeInUp delay-03s animated">
+            <div class="thumbnail car-box clearfix">
+                <div class="car-box-thumbnail">
+                    @if (c.Images.Any())
+                    {
+                        <img src="~/images/@c.Images.FirstOrDefault().ImageUrl">
+                    }
+                    else
+                    {
+                        <img src="~/images/not-found.png" alt="Not Found Image">
+                    }
+                    <div class="is-featured">
+                        <span>@c.Condition</span>
+                    </div>
+                </div>
+
+                <!-- detail -->
+                <div class="caption detail">
+                    <!-- Header -->
+                    <header class="clearfix">
+                        <h5 class="title">
+                            <a asp-controller="Car" asp-action="Details" asp-route-id="@c.Id">@c.Manufacturer @c.Model #@c.Id</a>
+                        </h5>
+                    </header>
+                    <!-- Facilities List -->
+                    <div class="facilities-area">
+                        <ul class="facilities-list clearfix">
+                            <li>
+                                <i class="fa fa-tint"></i>
+                                <span>@c.EngineType</span>
+                            </li>
+                            <li>
+                                <i class="fa fa-cog"></i>
+                                <span>@c.TypeOfTransmission</span>
+                            </li>
+                            <li>
+                                <i class="fa fa-road"></i>
+                                <span>@c.TravelledDistance</span>
+                            </li>
+                            <li>
+                                <i class="fa fa-flag-checkered"></i>
+                                <span>@c.BodyType</span>
+                            </li>
+                            <li>
+                                <i class="fa fa-calendar"></i>
+                                <span>@c.YearOfProduction</span>
+                            </li>
+                            <li>
+                                <i class="fa fa-leaf"></i>
+                                <span>@c.EuroStandart</span>
+                            </li>
+                        </ul>
+                    </div>
+
+                    <a class="btn btn-success btn-md detail-car-all-btn" asp-controller="Car" asp-action="Details" asp-route-id="@c.Id">Details</a>
+                    @if (User.Identity.IsAuthenticated)
+                    {
+                        <a class="btn btn-warning btn-md edit-car-all-btn" asp-controller="Car" asp-action="Edit" asp-route-id="@c.Id">Edit</a>
+                        <a class="btn btn-danger btn-md delete-car-all-btn" asp-controller="Car" asp-action="Delete" asp-route-id="@c.Id">Delete</a>
+                    }
+                </div>
+            </div>
         </div>
     }
 
     @if (Model.Sort != null)
     {
-        <ul class="pagination pagination-lg">
-            <li class="page-item @previousDisabled">
-                <a class="page-link @previousDisabled" asp-controller="Car" asp-action="AllCars" asp-route-page="@Model.PreviousPage" asp-route-searchQuery="@Model.SearchQuery" asp-route-sort="@Model.Sort" aria-label="Previous">
-                    <span aria-hidden="true">«</span>
-                    <span class="sr-only">Previous</span>
-                </a>
-            </li>
-            @for (int i = 1; i <= Model.TotalPages; i++)
-            {
-                <li class="page-item @(Model.CurrentPage == i ? "active" : string.Empty)"><a class="page-link" asp-controller="Car" asp-action="AllCars" asp-route-page="@i" asp-route-searchQuery="@Model.SearchQuery" asp-route-sort="@Model.Sort">@i</a></li>
-            }
-            <li class="page-item @nextDisabled">
-                <a class="page-link @nextDisabled" asp-controller="Car" asp-action="AllCars" asp-route-page="@Model.NextPage" asp-route-searchQuery="@Model.SearchQuery" asp-route-sort="@Model.Sort" aria-label="Next">
-                    <span aria-hidden="true">»</span>
-                    <span class="sr-only">Next</span>
-                </a>
-            </li>
-        </ul>
+        <div class="text-center">
+            <ul class="pagination pagination-lg">
+                <li class="page-item @previousDisabled">
+                    <a class="page-link @previousDisabled" asp-controller="Car" asp-action="AllCars" asp-route-page="@Model.PreviousPage" asp-route-searchQuery="@Model.SearchQuery" asp-route-sort="@Model.Sort" aria-label="Previous">
+                        <span aria-hidden="true">«</span>
+                        <span class="sr-only">Previous</span>
+                    </a>
+                </li>
+                @for (int i = 1; i <= Model.TotalPages; i++)
+                {
+                    <li class="page-item @(Model.CurrentPage == i ? "active" : string.Empty)"><a class="page-link" asp-controller="Car" asp-action="AllCars" asp-route-page="@i" asp-route-searchQuery="@Model.SearchQuery" asp-route-sort="@Model.Sort">@i</a></li>
+                }
+                <li class="page-item @nextDisabled">
+                    <a class="page-link @nextDisabled" asp-controller="Car" asp-action="AllCars" asp-route-page="@Model.NextPage" asp-route-searchQuery="@Model.SearchQuery" asp-route-sort="@Model.Sort" aria-label="Next">
+                        <span aria-hidden="true">»</span>
+                        <span class="sr-only">Next</span>
+                    </a>
+                </li>
+            </ul>
+        </div>
     }
     else
     {
-        <ul class="pagination pagination-lg">
-            <li class="page-item @previousDisabled">
-                <a class="page-link @previousDisabled" asp-controller="Car" asp-action="AllCars" asp-route-page="@Model.PreviousPage" asp-route-searchQuery="@Model.SearchQuery" asp-route-sort="@Model.Sort" aria-label="Previous">
-                    <span aria-hidden="true">«</span>
-                    <span class="sr-only">Previous</span>
-                </a>
-            </li>
-            @for (int i = 1; i <= Model.TotalPages; i++)
-            {
-                <li class="page-item @(Model.CurrentPage == i ? "active" : string.Empty)"><a class="page-link" asp-controller="Car" asp-action="AllCars" asp-route-page="@i" asp-route-searchQuery="@Model.SearchQuery" asp-route-sort="@Model.Sort">@i</a></li>
-            }
-            <li class="page-item @nextDisabled">
-                <a class="page-link @nextDisabled" asp-controller="Car" asp-action="AllCars" asp-route-page="@Model.NextPage" asp-route-searchQuery="@Model.SearchQuery" asp-route-sort="@Model.Sort" aria-label="Next">
-                    <span aria-hidden="true">»</span>
-                    <span class="sr-only">Next</span>
-                </a>
-            </li>
-        </ul>
+        <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12 text-center">
+            <ul class="pagination pagination-lg">
+                <li class="page-item @previousDisabled">
+                    <a class="page-link @previousDisabled" asp-controller="Car" asp-action="AllCars" asp-route-page="@Model.PreviousPage" asp-route-searchQuery="@Model.SearchQuery" asp-route-sort="@Model.Sort" aria-label="Previous">
+                        <span aria-hidden="true">«</span>
+                        <span class="sr-only">Previous</span>
+                    </a>
+                </li>
+                @for (int i = 1; i <= Model.TotalPages; i++)
+                {
+                    <li class="page-item @(Model.CurrentPage == i ? "active disabled-pagination" : string.Empty)"><a class="page-link" asp-controller="Car" asp-action="AllCars" asp-route-page="@i" asp-route-searchQuery="@Model.SearchQuery" asp-route-sort="@Model.Sort">@i</a></li>
+                }
+                <li class="page-item @nextDisabled">
+                    <a class="page-link @nextDisabled" asp-controller="Car" asp-action="AllCars" asp-route-page="@Model.NextPage" asp-route-searchQuery="@Model.SearchQuery" asp-route-sort="@Model.Sort" aria-label="Next">
+                        <span aria-hidden="true">»</span>
+                        <span class="sr-only">Next</span>
+                    </a>
+                </li>
+            </ul>
+        </div>
     }
 }
 else

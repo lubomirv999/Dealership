@@ -166,8 +166,10 @@
             };
 
             MailMessage mm = new MailMessage(id, id, carToBuy.Manufacturer + " " + carToBuy.Model + " with id #" + carToBuy.Id,
-                "person with name " + personInfo.FirstName + " " + personInfo.LastName + " wants to buy car #" + carToBuy.Id + "(" + carToBuy.Manufacturer + " " + carToBuy.Model + "). Contact him on phone : " + personInfo.GSM + " or email : " + personInfo.Email
-                + " and comment: " + personInfo.Comment);
+                "Person with name " + personInfo.FirstName + " " + personInfo.LastName
+                + "\nWants to buy car #" + carToBuy.Id + "(" + carToBuy.Manufacturer + " " + carToBuy.Model + "). "
+                + "\nContact him on phone : " + personInfo.GSM + " or E-Mail : " + personInfo.Email
+                + "\nComment: " + personInfo.Comment);
 
             client.Send(mm);
         }

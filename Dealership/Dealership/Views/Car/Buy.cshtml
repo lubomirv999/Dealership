@@ -25,13 +25,13 @@
 
                 <div class="form-group">
                     <label class="create-car-labels" asp-for="Email"></label>
-                    <input asp-for="Email" class="form-control" />
+                    <input asp-for="Email" type="email" class="form-control" />
                     <span asp-validation-for="Email" class="text-danger"></span>
                 </div>
 
                 <div class="form-group">
                     <label class="create-car-labels" asp-for="GSM"></label>
-                    <input asp-for="GSM" class="form-control" />
+                    <input asp-for="GSM" type="number" class="form-control" />
                     <span asp-validation-for="GSM" class="text-danger"></span>
                 </div>
             </div>
@@ -39,7 +39,7 @@
             <div class="right-create-car-part col-md-6">
                 <div class="form-group">
                     <label class="create-car-labels" asp-for="Comment"></label>
-                    <input asp-for="Comment" class="form-control" />
+                    <textarea rows="10" cols="20" asp-for="Comment" class="form-control"></textarea>
                     <span asp-validation-for="Comment" class="text-danger"></span>
                 </div>
             </div>
