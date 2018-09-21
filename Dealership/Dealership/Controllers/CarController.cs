@@ -16,10 +16,12 @@
         private const int PageSize = 6;
 
         private readonly ICarService carsService;
+        private readonly IEmailService emailService;
 
-        public CarController(ICarService carsService)
+        public CarController(ICarService carsService, IEmailService emailService)
         {
             this.carsService = carsService;
+            this.emailService = emailService;
         }
 
         public IActionResult AllCars(string sort, string searchQuery, int page = 1, int pageSize = 6)
@@ -51,7 +53,7 @@
 
             Car carToBuy = carsService.FindById(PersonToSend.CarToBuyId);
 
-            this.carsService.SendEMail(PersonToSend, carToBuy);
+            this.emailService.SendEMail(PersonToSend, carToBuy);
             return View("Thanks");
         }
 

@@ -1,7 +1,6 @@
 ﻿namespace Dealership.Services
 {
     using Dealership.Data;
-    using Dealership.Models.CarModels;
     using Microsoft.AspNetCore.Hosting;
     using Microsoft.AspNetCore.Http;
     using Microsoft.EntityFrameworkCore;
@@ -9,7 +8,6 @@
     using System.Collections.Generic;
     using System.IO;
     using System.Linq;
-    using System.Net.Mail;
 
     public class CarService : ICarService
     {
@@ -30,19 +28,23 @@
             {
                 if (image != null)
                 {
-                    var imgGuid = Guid.NewGuid();
-                    string img = Path.GetFileName(image.FileName);
                     string imgMimeType = image.ContentType.Split("/").Last();
-                    string path = Path.Combine(hostingEnvironment.WebRootPath + "\\images", imgGuid.ToString() + "." + imgMimeType);
 
-                    using (var fs = new FileStream(path, FileMode.Create, FileAccess.Write))
+                    if (imgMimeType == "jpg" || imgMimeType == "png" || imgMimeType == "jpeg")
                     {
-                        image.CopyTo(fs);
-                    }
+                        var imgGuid = Guid.NewGuid();
+                        string img = Path.GetFileName(image.FileName);
+                        string path = Path.Combine(hostingEnvironment.WebRootPath + "\\images", imgGuid.ToString() + "." + imgMimeType);
 
-                    var dataImg = new Image();
-                    dataImg.ImageUrl = imgGuid + "." + imgMimeType;
-                    dataImages.Add(dataImg);
+                        using (var fs = new FileStream(path, FileMode.Create, FileAccess.Write))
+                        {
+                            image.CopyTo(fs);
+                        }
+
+                        var dataImg = new Image();
+                        dataImg.ImageUrl = imgGuid + "." + imgMimeType;
+                        dataImages.Add(dataImg);
+                    }
                 }
             }
 
@@ -62,19 +64,24 @@
             {
                 if (image != null)
                 {
-                    var imgGuid = Guid.NewGuid();
-                    string img = Path.GetFileName(image.FileName);
                     string imgMimeType = image.ContentType.Split("/").Last();
-                    string path = Path.Combine(hostingEnvironment.WebRootPath + "\\images", imgGuid.ToString() + "." + imgMimeType);
 
-                    using (var fs = new FileStream(path, FileMode.Create, FileAccess.Write))
+                    if (imgMimeType == "jpg" || imgMimeType == "png" || imgMimeType == "jpeg")
                     {
-                        image.CopyTo(fs);
-                    }
 
-                    var dataImg = new Image();
-                    dataImg.ImageUrl = imgGuid + "." + imgMimeType;
-                    dataImages.Add(dataImg);
+                        var imgGuid = Guid.NewGuid();
+                        string img = Path.GetFileName(image.FileName);
+                        string path = Path.Combine(hostingEnvironment.WebRootPath + "\\images", imgGuid.ToString() + "." + imgMimeType);
+
+                        using (var fs = new FileStream(path, FileMode.Create, FileAccess.Write))
+                        {
+                            image.CopyTo(fs);
+                        }
+
+                        var dataImg = new Image();
+                        dataImg.ImageUrl = imgGuid + "." + imgMimeType;
+                        dataImages.Add(dataImg);
+                    }
                 }
             }
 
@@ -148,30 +155,6 @@
                         .Skip((page - 1) * pageSize)
                         .Take(pageSize);
             }
-        }
-
-        public void SendEMail(BuyCarFormModel personInfo, Car carToBuy)
-        {
-            string id = "lvdealership@gmail.com";
-            string password = "LVDealership123";
-
-            SmtpClient client = new SmtpClient
-            {
-                Host = "smtp.gmail.com",
-                Port = 587,
-                EnableSsl = true,
-                DeliveryMethod = SmtpDeliveryMethod.Network,
-                Credentials = new System.Net.NetworkCredential(id, password),
-                Timeout = 10000,
-            };
-
-            MailMessage mm = new MailMessage(id, id, carToBuy.Manufacturer + " " + carToBuy.Model + " with id #" + carToBuy.Id,
-                "Person with name " + personInfo.FirstName + " " + personInfo.LastName
-                + "\nWants to buy car #" + carToBuy.Id + "(" + carToBuy.Manufacturer + " " + carToBuy.Model + "). "
-                + "\nContact him on phone : " + personInfo.GSM + " or E-Mail : " + personInfo.Email
-                + "\nComment: " + personInfo.Comment);
-
-            client.Send(mm);
         }
 
         public IEnumerable<Car> SearchCars(string searchQuery)

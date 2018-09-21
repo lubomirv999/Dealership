@@ -31,6 +31,7 @@
 
             // Add application services.
             services.AddTransient<ICarService, CarService>();
+            services.AddTransient<IEmailService, EmailService>();
 
             services.AddMvc();
         }
