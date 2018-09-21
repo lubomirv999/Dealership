@@ -2,14 +2,22 @@
 {
     using Dealership.Data;
     using Dealership.Models.CarModels;
+    using Microsoft.Extensions.Configuration;
     using System.Net.Mail;
 
     public class EmailService : IEmailService
     {
+        private IConfiguration Configuration { get; }
+
+        public EmailService(IConfiguration configuration)
+        {
+            Configuration = configuration;
+        }
+
         public void SendEMail(BuyCarFormModel personInfo, Car carToBuy)
         {
-            string id = "lvdealership@gmail.com";
-            string password = "LVDealership123";
+            string id = Configuration.GetSection("EmailId").Value.ToString();
+            string password = Configuration.GetSection("EmailPassword").Value.ToString();
 
             SmtpClient client = new SmtpClient
             {

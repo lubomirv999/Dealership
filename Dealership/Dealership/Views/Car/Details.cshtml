@@ -8,7 +8,7 @@
 
 <div class="col-md-8 col-md-offset-2 details-page-heading">
     <div class="pull-left">
-        <h3>@Model.Manufacturer @Model.Model</h3>        
+        <h3>@Model.Manufacturer @Model.Model</h3>
     </div>
     <div class="p-r">
         <h3>&euro; @Model.Price</h3>
@@ -22,10 +22,17 @@
     </div>
 </div>
 
-<div class="col-md-8 details-images">
-    @foreach (var image in Model.Images)
+<div class="col-md-8 details-images text-center">
+    @if (Model.Images.Count <= 0)
     {
-        <img src="~/images/@image.ImageUrl" class="col-md-4 details-img clearfix" alt="@Model.Manufacturer + @Model.Model">
+        <img src="~/images/not-found.png" class="col-md-4 details-img clearfix" alt="No Image">
+    }
+    else
+    {
+        @foreach (var image in Model.Images)
+        {
+            <img src="~/images/@image.ImageUrl" class="col-md-4 details-img clearfix" alt="@Model.Manufacturer @Model.Model">
+        }
     }
 </div>
 
