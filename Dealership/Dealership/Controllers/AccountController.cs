@@ -7,9 +7,9 @@
     using Microsoft.AspNetCore.Identity;
     using Microsoft.AspNetCore.Mvc;
     using System.Threading.Tasks;
-
-    [Authorize]
+    
     [Route("[controller]/[action]")]
+    [Authorize]
     public class AccountController : Controller
     {
         private readonly UserManager<ApplicationUser> _userManager;
@@ -72,8 +72,8 @@
         }
 
         [HttpPost]
-        [ValidateAntiForgeryToken]
         [Authorize]
+        [ValidateAntiForgeryToken]
         public async Task<IActionResult> CreateUser(CreateUserViewModel model, string returnUrl = null)
         {
             ViewData["ReturnUrl"] = returnUrl;

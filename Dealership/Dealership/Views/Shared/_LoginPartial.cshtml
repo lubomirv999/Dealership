@@ -11,7 +11,7 @@
             <li class="nav-links">
                 <a>Hello, @UserManager.GetUserName(User)!</a>
             </li>
-            <li class="nav-links">
+            <li class="nav-links admin-btns">
                 <button class="logout-btn" type="submit">Log out</button>
             </li>
         </ul>
@@ -20,6 +20,6 @@
 else
 {
     <ul class="nav navbar-nav navbar-right">      
-        <li class="nav-links"><a asp-area="" asp-controller="Account" asp-action="Login">Log in</a></li>
+        <li class="nav-links admin-btns"><a asp-area="" asp-controller="Account" asp-action="Login">Log in</a></li>
     </ul>
 }
