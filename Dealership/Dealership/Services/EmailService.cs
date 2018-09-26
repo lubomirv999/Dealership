@@ -3,6 +3,7 @@
     using Dealership.Data;
     using Dealership.Models.CarModels;
     using Microsoft.Extensions.Configuration;
+    using System;
     using System.Net.Mail;
 
     public class EmailService : IEmailService
@@ -18,10 +19,12 @@
         {
             string id = Configuration.GetSection("EmailId").Value.ToString();
             string password = Configuration.GetSection("EmailPassword").Value.ToString();
+            string msg = $"Person with name {personInfo.FirstName} {personInfo.LastName}{Environment.NewLine}Wants to buy car #{carToBuy.Id} ({carToBuy.Manufacturer} {carToBuy.Model}){Environment.NewLine}Contact him on Phone: {personInfo.GSM} or E-Mail: {personInfo.Email}{Environment.NewLine}Comment: {personInfo.Comment}";
+            string emailTitle = $@"{carToBuy.Manufacturer} {carToBuy.Model} ID# {carToBuy.Id}";
 
             SmtpClient client = new SmtpClient
             {
-                Host = Configuration.GetSection("Host").Value.ToString(),
+                Host = "smtp.gmail.com",
                 Port = 587,
                 EnableSsl = true,
                 DeliveryMethod = SmtpDeliveryMethod.Network,
@@ -29,12 +32,7 @@
                 Timeout = 10000,
             };
 
-            MailMessage mm = new MailMessage(id, id, carToBuy.Manufacturer + " " + carToBuy.Model + " with id #" + carToBuy.Id,
-                "Person with name " + personInfo.FirstName + " " + personInfo.LastName
-                + "\nWants to buy car #" + carToBuy.Id + "(" + carToBuy.Manufacturer + " " + carToBuy.Model + "). "
-                + "\nContact him on phone : " + personInfo.GSM + " or E-Mail : " + personInfo.Email
-                + "\nComment: " + personInfo.Comment);
-
+            MailMessage mm = new MailMessage(id, id, emailTitle, msg);
             client.Send(mm);
         }
     }
