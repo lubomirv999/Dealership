@@ -7,7 +7,7 @@
 
     public interface ICarService
     {
-        IEnumerable<Car> All(string sort, string searchQuery, int page = 1, int pageSize = 6);        
+        AllCarsListModel All(string sort, string searchQuery, int pageSize ,int page = 1);        
 
         void Add(Car addCarFormModel, ICollection<IFormFile> images);
 
@@ -21,6 +21,6 @@
 
         Car FindById(int id);
 
-        IEnumerable<Car> SearchCars(string searchQuery);
+        AllCarsListModel SearchCars(string searchQuery, int pageSize, int page);
     }
 }

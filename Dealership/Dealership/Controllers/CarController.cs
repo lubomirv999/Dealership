@@ -24,15 +24,16 @@
             this.emailService = emailService;
         }
 
-        public IActionResult AllCars(string sort, string searchQuery, int page = 1, int pageSize = 6)
+        public IActionResult AllCars(string sort, string searchQuery, int page = 1)
         {
             ViewBag.SearchQuery = searchQuery;
+            var cars = this.carsService.All(sort, searchQuery, PageSize, page);
 
             return View("AllCars", new CarListModel
             {
-                Cars = this.carsService.All(sort, searchQuery, page, pageSize),
+                Cars = cars.Cars,
                 CurrentPage = page,
-                TotalPages = (int)Math.Ceiling(this.carsService.SearchCars(searchQuery).Count() / (double)PageSize),
+                TotalPages = (int)Math.Ceiling(cars.Count / (double)PageSize),
                 SearchQuery = searchQuery,
                 Sort = sort
             });

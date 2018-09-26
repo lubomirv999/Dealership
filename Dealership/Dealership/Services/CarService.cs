@@ -1,6 +1,7 @@
 ﻿namespace Dealership.Services
 {
     using Dealership.Data;
+    using Dealership.Models.CarModels;
     using Microsoft.AspNetCore.Hosting;
     using Microsoft.AspNetCore.Http;
     using Microsoft.EntityFrameworkCore;
@@ -118,58 +119,79 @@
             db.SaveChanges();
         }
 
-        public IEnumerable<Car> All(string sort, string searchQuery, int page = 1, int pageSize = 6)
+        public AllCarsListModel All(string sort, string searchQuery, int pageSize, int page = 1)
         {
-            var searchedCars = SearchCars(searchQuery);
+            var model = new AllCarsListModel();
+            model = SearchCars(searchQuery, pageSize, page);
 
             switch (sort)
             {
                 case "Manufacturer":
-                    return searchedCars
-                        .OrderBy(c => c.Manufacturer)
-                        .Skip((page - 1) * pageSize)
-                        .Take(pageSize);
-
+                    model.Cars = model
+                        .Cars
+                        .OrderBy(c => c.Manufacturer);
+                    break;
                 case "Condition":
-                    return searchedCars
-                        .OrderBy(c => c.Condition)
-                        .Skip((page - 1) * pageSize)
-                        .Take(pageSize);
+                    model.Cars = model
+                        .Cars
+                        .OrderBy(c => c.Condition);
+                    break;
                 case "Year":
-                    return searchedCars
-                        .OrderBy(c => c.YearOfProduction)
-                        .Skip((page - 1) * pageSize)
-                        .Take(pageSize);
+                    model.Cars = model
+                        .Cars
+                        .OrderBy(c => c.YearOfProduction);
+                    break;
                 case "Price Asc":
-                    return searchedCars
-                        .OrderBy(c => c.Price)
-                        .Skip((page - 1) * pageSize)
-                        .Take(pageSize);
+                    model.Cars = model
+                        .Cars
+                        .OrderBy(c => c.Price);
+                    break;
                 case "Price Desc":
-                    return searchedCars
-                        .OrderByDescending(c => c.Price)
-                        .Skip((page - 1) * pageSize)
-                        .Take(pageSize);
+                    model.Cars = model
+                        .Cars
+                        .OrderByDescending(c => c.Price);
+                    break;
                 default:
-                    return searchedCars
-                        .Skip((page - 1) * pageSize)
-                        .Take(pageSize);
+                    break;
             }
+
+            return model;
         }
 
-        public IEnumerable<Car> SearchCars(string searchQuery)
+        public AllCarsListModel SearchCars(string searchQuery, int pageSize, int page)
         {
             if (!string.IsNullOrEmpty(searchQuery))
             {
-                return this.db.Cars.Where(c =>
-                    c.Manufacturer.Contains(searchQuery)
-                    || c.Model.Contains(searchQuery)
-                    || c.SaleDescription.Contains(searchQuery))
-                    .Include("Images");
+                var model = new AllCarsListModel();
+
+                model.Cars = this.db.Cars.Where(c =>
+                   c.Manufacturer.Contains(searchQuery)
+                   || c.Model.Contains(searchQuery)
+                   || c.SaleDescription.Contains(searchQuery))
+                   .Skip((page - 1) * pageSize)
+                    .Take(pageSize)
+                    .Include("Images")
+                    .ToList();
+                model.Count = this.db.Cars.Where(c =>
+                   c.Manufacturer.Contains(searchQuery)
+                   || c.Model.Contains(searchQuery)
+                   || c.SaleDescription.Contains(searchQuery))
+                   .Count();
+
+                return model;
             }
             else
             {
-                return this.db.Cars.Include("Images"); ;
+                var model = new AllCarsListModel();
+
+                model.Cars = this.db.Cars
+                    .Skip((page - 1) * pageSize)
+                    .Take(pageSize)
+                    .Include("Images")
+                    .ToList();
+                model.Count = this.db.Cars.Count();
+
+                return model;
             }
         }
 

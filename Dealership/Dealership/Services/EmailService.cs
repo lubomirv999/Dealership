@@ -21,7 +21,7 @@
 
             SmtpClient client = new SmtpClient
             {
-                Host = "smtp.gmail.com",
+                Host = Configuration.GetSection("Host").Value.ToString(),
                 Port = 587,
                 EnableSsl = true,
                 DeliveryMethod = SmtpDeliveryMethod.Network,
