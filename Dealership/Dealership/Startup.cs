@@ -15,7 +15,7 @@
         public Startup(IConfiguration configuration)
         {
             Configuration = configuration;
-        }      
+        }
 
         public IConfiguration Configuration { get; }
 
@@ -32,13 +32,14 @@
             // Add application services.
             services.AddTransient<ICarService, CarService>();
             services.AddTransient<IEmailService, EmailService>();
+            services.AddTransient<IAccountService, AccountService>();
 
             services.AddMvc();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
         public void Configure(IApplicationBuilder app, IHostingEnvironment env)
-        {
+        {            
             if (env.IsDevelopment())
             {
                 app.UseDeveloperExceptionPage();

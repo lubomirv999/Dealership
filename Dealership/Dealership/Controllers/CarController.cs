@@ -58,11 +58,11 @@
             return View("Thanks");
         }
 
-        [Authorize]
+        [Authorize(Roles = "Moderator")]
         public IActionResult Create() => View();
 
         [HttpPost]
-        [Authorize]
+        [Authorize(Roles = "Moderator")]
         public IActionResult Create(Car addCarModel, ICollection<IFormFile> images)
         {
             if (!ModelState.IsValid)
@@ -94,7 +94,7 @@
             return this.RedirectToAction("AllCars");
         }
 
-        [Authorize]
+        [Authorize(Roles = "Moderator")]
         public IActionResult Edit(int id)
         {
             var car = this.carsService.FindById(id);
@@ -125,7 +125,7 @@
         }
 
         [HttpPost]
-        [Authorize]
+        [Authorize(Roles = "Moderator")]
         public IActionResult Edit(int id, Car editModel, ICollection<IFormFile> images)
         {
             if (!ModelState.IsValid)
@@ -147,7 +147,7 @@
             return this.RedirectToAction("Details", new { id = id });
         }
 
-        [Authorize]
+        [Authorize(Roles = "Moderator")]
         public IActionResult Delete(int id)
         {
             this.carsService.Delete(id);
@@ -170,7 +170,7 @@
         }
         
         [HttpPost]
-        [Authorize]
+        [Authorize(Roles = "Moderator")]
         public void DeletePhoto(int photoId)
         {
             this.carsService.DeletePhoto(photoId);

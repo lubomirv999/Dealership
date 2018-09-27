@@ -14,7 +14,7 @@
         <link rel="stylesheet" href="https://ajax.aspnetcdn.com/ajax/bootstrap/3.3.7/css/bootstrap.min.css"
               asp-fallback-href="~/lib/bootstrap/dist/css/bootstrap.min.css"
               asp-fallback-test-class="sr-only" asp-fallback-test-property="position" asp-fallback-test-value="absolute" />
-        <link rel="stylesheet" href="~/css/site.min.css" asp-append-version="true" />        
+        <link rel="stylesheet" href="~/css/site.min.css" asp-append-version="true" />
     </environment>
 </head>
 <body>
@@ -34,12 +34,16 @@
                 <ul class="nav navbar-nav">
                     <li class="nav-links"><a asp-area="" asp-controller="Car" asp-action="AllCars">Home</a></li>
 
-                    @if (User.Identity.IsAuthenticated)
+                    @if (User.IsInRole("Moderator"))
                     {
                         <li class="nav-links"><a asp-area="" asp-controller="Car" asp-action="Create">Sell Car</a></li>
+                    }
+
+                    @if (User.IsInRole("Admin"))
+                    {
                         <li id="create-admin" class="nav-links"><a asp-area="" asp-controller="Account" asp-action="CreateUser">Register New Admin</a></li>
                     }
-                    
+
                     <li class="nav-links">
                         <div class="search">
                             <form class="form-wrapper">
