@@ -41,6 +41,7 @@
 
                     @if (User.IsInRole("Admin"))
                     {
+                        <li class="nav-links"><a asp-area="" asp-controller="Account" asp-action="All">All Users</a></li>
                         <li id="create-admin" class="nav-links"><a asp-area="" asp-controller="Account" asp-action="CreateUser">Register New Admin</a></li>
                     }
 
