@@ -1,0 +1,16 @@
+﻿@model UserAndRolesModel
+
+@{
+    ViewData["Title"] = Model.User.UserName + " Details";
+}
+
+<h1>Details for user @Model.User.UserName</h1>
+
+<ul>
+
+    @foreach (var role in Model.Roles)
+    {
+        <li> @role.Text </li>
+    }
+
+</ul>

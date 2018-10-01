@@ -165,6 +165,19 @@
             return View(usersAndRoles);
         }
 
+        [Authorize(Roles = "Admin")]
+        public IActionResult Details(string id)
+        {
+            var user = _usersService.FindById(id);
+
+            if (user == null)
+            {
+                TempData["roleResult"] = "Cannot find the user";
+                return RedirectToAction(nameof(All));
+            }
+            return View("Details", new UserAndRolesModel() { User = user, Roles = _usersService.AllRoles() });
+        }
+
         [HttpPost]
         public async Task<IActionResult> AddToRole(AddUserToRoleFormModel model)
         {

@@ -4,6 +4,7 @@
     using Dealership.Models;
     using Dealership.Models.AccountViewModels;
     using Microsoft.AspNetCore.Mvc.Rendering;
+    using System.Collections.Generic;
     using System.Linq;
 
     public class AccountService : IAccountService
@@ -23,19 +24,41 @@
                 .Skip((page - 1) * pageSize)
                 .Take(pageSize)
                 .ToList();
-            model.Roles = this.db.Roles.Select(r => new SelectListItem
+            model.Roles = AllRoles();
+
+            return model;
+        }
+
+        public IEnumerable<SelectListItem> AllRoles()
+        {
+            return this.db.Roles.Select(r => new SelectListItem
             {
                 Text = r.Name,
                 Value = r.Name
-            })
-                .ToList();
+            }).ToList();
+        }
 
-            return model;
+
+        public void Delete(string id)
+        {
+            var UserToDelete = this.db
+            .Users
+            .Where(u => u.Id == id)
+            .FirstOrDefault();
+
+            db.Remove(UserToDelete);
+            db.SaveChanges();
         }
 
         public int Count()
         {
             return db.Users.Count();
         }
+
+        public ApplicationUser FindById(string id)
+            => this.db
+            .Users
+            .Where(u => u.Id == id)
+            .FirstOrDefault();
     }
 }
