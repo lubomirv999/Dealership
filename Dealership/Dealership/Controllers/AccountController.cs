@@ -141,6 +141,14 @@
             return View(model);
         }
 
+        [Authorize(Roles = "Admin")]
+        public IActionResult Delete(string id)
+        {
+            this._usersService.Delete(id);
+
+            return RedirectToAction("All");
+        }
+
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Logout()

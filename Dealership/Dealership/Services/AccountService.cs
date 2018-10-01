@@ -41,13 +41,20 @@
 
         public void Delete(string id)
         {
-            var UserToDelete = this.db
-            .Users
-            .Where(u => u.Id == id)
-            .FirstOrDefault();
+            var user = this.db
+                .Users
+                .Where(u => u.Id == id)
+                .FirstOrDefault();
 
-            db.Remove(UserToDelete);
-            db.SaveChanges();
+            if (user.Email != "Admin@dealership.com")
+            {
+                this.db.Remove(user);
+                this.db.SaveChanges();
+            }
+            else
+            {
+
+            }
         }
 
         public int Count()

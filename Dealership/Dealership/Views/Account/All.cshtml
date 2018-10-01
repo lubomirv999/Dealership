@@ -40,7 +40,7 @@
                                                     <i class="fa fa-pencil fa-stack-1x fa-inverse"></i>
                                                 </span>
                                             </a>
-                                            <a asp-controller="Account" asp-action="Delete" asp-route-id="@user.Id" class="table-link danger">
+                                            <a asp-controller="Account" asp-action="Delete" asp-route-id="@user.Id" class="table-link danger delete-user-all-btn">
                                                 <span class="fa-stack">
                                                     <i class="fa fa-square fa-stack-2x"></i>
                                                     <i class="fa fa-trash-o fa-stack-1x fa-inverse"></i>
@@ -78,3 +78,6 @@
         </li>
     </ul>
 </div>
+
+<script src="~/lib/jquery/dist/jquery.js"></script>
+<script src="~/js/delete-user.js"></script>
