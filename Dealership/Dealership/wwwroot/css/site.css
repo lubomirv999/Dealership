@@ -370,6 +370,76 @@ ul.facilities-list.clearfix {
 
 /* Create Admin */
 
+/* All Users */
+
+.all-users {
+    clear: both;
+    color: #34D1BE;
+    padding-left: 30px;
+}
+
+.main-box {
+    background: #FFFFFF;
+    -webkit-box-shadow: 1px 1px 2px 0 #CCCCCC;
+    -moz-box-shadow: 1px 1px 2px 0 #CCCCCC;
+    -o-box-shadow: 1px 1px 2px 0 #CCCCCC;
+    -ms-box-shadow: 1px 1px 2px 0 #CCCCCC;
+    box-shadow: 1px 1px 2px 0 #CCCCCC;
+    margin-bottom: 16px;
+    padding: 20px;
+}
+
+.table thead > tr > th span {
+    border-bottom: 2px solid #C2C2C2;
+    display: inline-block;
+    padding: 0 5px;
+    padding-bottom: 5px;
+    font-weight: normal;
+}
+
+.table thead > tr > th {
+    border-bottom: 1px solid #C2C2C2;
+    padding-bottom: 0;
+}
+
+.all-users-heading{
+    font-size: 20px;
+}
+
+.user-info {
+    font-size: 17px;
+    color: #2bb6a3;
+    outline: none !important;
+    padding-left: 10px;
+    padding-top: 20px;
+}
+
+.fa-inverse {
+    color: #ffffff;
+}
+
+.fa-stack-1x {
+    line-height: inherit;
+}
+
+.user-actions-table{
+    width: 20%;
+}
+
+.user-actions {
+    padding: 20px 20px 0 0;
+}
+
+.table a.table-link.default {
+    color: #2bb6a3;
+}
+
+.table a.table-link.danger {
+    color: #fe635f;
+}
+
+/* All Users */
+
 /* Details Buy Car Btn */
 
 .details-buy-car-btn{

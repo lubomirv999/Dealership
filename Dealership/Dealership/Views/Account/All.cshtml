@@ -11,83 +11,70 @@
     var nextDisabled = Model.CurrentPage == Model.TotalPages ? "disabled" : string.Empty;
 }
 
-@if (Model.Users.Any())
-{
-    <table class="table table-bordered table-hover">
-        <thead>
-            <tr>
-                <th>
-                    Username
-                </th>
-                <th>
-                    E-mail
-                </th>
-                <th>
-                </th>
-            </tr>
-        </thead>
-        <tbody>
-            @foreach (var user in Model.Users)
-            {
-                <tr>
-                    <th>
-                        @user.UserName
-                    </th>
-                    <th>
-                        @user.Email
-                    </th>
-                    <th>
-                        <form method="post" asp-controller="Account" asp-action="AddToRole">
-                            <div class="row">
-                                <div class="col-md-9">
-                                    <input type="hidden" name="UserId" value="@user.Id" />
-                                    <select name="Role" asp-items="Model.Roles" class="form-control"></select>
-                                </div>
-                                <div class="col-md-3">
-                                    <input class="btn btn-sm btn-primary" type="submit" value="Add To Role" />
-                                </div>
-                            </div>
-                        </form>
+<h1 class="text-center all-users col-lg-12 col-md-12 col-sm-12- col-xs-12">Users</h1>
 
-                        <form method="post" asp-controller="Account" asp-action="RemoveFromRole">
-                            <div class="row">
-                                <div class="col-md-9">
-                                    <input type="hidden" name="UserId" value="@user.Id" />
-                                    <select name="Role" asp-items="Model.Roles" class="form-control"></select>
-                                </div>
-                                <div class="col-md-3">
-                                    <input class="btn btn-sm btn-primary" type="submit" value="Remove from Role" />
-                                </div>
-                            </div>
-                        </form>
-                    </th>
-                </tr>
-            }
-        </tbody>
-    </table>
-
-    <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12 text-center">
-        <ul class="pagination pagination-lg">
-            <li class="page-item @previousDisabled">
-                <a class="page-link @previousDisabled" asp-controller="Account" asp-action="All" asp-route-page="@Model.PreviousPage" aria-label="Previous">
-                    <span aria-hidden="true">«</span>
-                    <span class="sr-only">Previous</span>
-                </a>
-            </li>
-            @for (int i = 1; i <= Model.TotalPages; i++)
-            {
-            <li class="page-item @(Model.CurrentPage == i ? "active disabled-pagination" : string.Empty)"><a class="page-link" asp-controller="Account" asp-action="All" asp-route-page="@i">@i</a></li>
-            }
-                <li class="page-item @nextDisabled">
-                    <a class="page-link @nextDisabled" asp-controller="Account" asp-action="All" asp-route-page="@Model.NextPage" aria-label="Next">
-                        <span aria-hidden="true">»</span>
-                        <span class="sr-only">Next</span>
-                    </a>
-                </li>
-            </ul>
+<div class="container">
+    <div class="row">
+        <div class="col-lg-12">
+            <div class="main-box clearfix">
+                <div class="table-responsive">
+                    <table class="table user-list">
+                        <thead>
+                            <tr>
+                                <th><span class="all-users-heading">Email</span></th>
+                                <th><span class="all-users-heading">Actions</span></th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @foreach (var user in Model.Users)
+                            {
+                                <tr>
+                                    <td>
+                                        <p class="user-info">@user.Email</p>
+                                    </td>
+                                    <td class="user-actions-table">
+                                        <div class="user-actions">
+                                            <a asp-controller="Account" asp-action="Details" asp-route-id="@user.Id" class="table-link default">
+                                                <span class="fa-stack">
+                                                    <i class="fa fa-square fa-stack-2x"></i>
+                                                    <i class="fa fa-pencil fa-stack-1x fa-inverse"></i>
+                                                </span>
+                                            </a>
+                                            <a asp-controller="Account" asp-action="Delete" asp-route-id="@user.Id" class="table-link danger">
+                                                <span class="fa-stack">
+                                                    <i class="fa fa-square fa-stack-2x"></i>
+                                                    <i class="fa fa-trash-o fa-stack-1x fa-inverse"></i>
+                                                </span>
+                                            </a>
+                                        </div>
+                                    </td>
+                                </tr>
+                            }
+                        </tbody>
+                    </table>
+                </div>
+            </div>
         </div>
-}
-else
-{
-    <h1>Error! Please log out and log in again</h1>
-}
+    </div>
+</div>
+
+<div class="col-lg-12 col-md-12 col-sm-12 col-xs-12 text-center">
+    <ul class="pagination pagination-lg">
+        <li class="page-item @previousDisabled">
+            <a class="page-link @previousDisabled" asp-controller="Account" asp-action="All" asp-route-page="@Model.PreviousPage" aria-label="Previous">
+                <span aria-hidden="true">«</span>
+                <span class="sr-only">Previous</span>
+            </a>
+        </li>
+        @for (int i = 1; i <= Model.TotalPages; i++)
+        {
+            <li class="page-item @(Model.CurrentPage == i ? "active disabled-pagination" : string.Empty)"><a class="page-link" asp-controller="Account" asp-action="All" asp-route-page="@i">@i</a></li>
+        }
+        <li class="page-item @nextDisabled">
+            <a class="page-link @nextDisabled" asp-controller="Account" asp-action="All" asp-route-page="@Model.NextPage" aria-label="Next">
+                <span aria-hidden="true">»</span>
+                <span class="sr-only">Next</span>
+            </a>
+        </li>
+    </ul>
+</div>
