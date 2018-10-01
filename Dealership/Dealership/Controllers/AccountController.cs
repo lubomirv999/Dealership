@@ -7,12 +7,15 @@
     using Microsoft.AspNetCore.Authorization;
     using Microsoft.AspNetCore.Identity;
     using Microsoft.AspNetCore.Mvc;
+    using System;
     using System.Threading.Tasks;
 
     [Route("[controller]/[action]")]
     [Authorize]
     public class AccountController : Controller
     {
+        private const int PageSize = 6;
+
         private readonly UserManager<ApplicationUser> _userManager;
         private readonly SignInManager<ApplicationUser> _signInManager;
         private readonly IAccountService _usersService;
@@ -153,9 +156,11 @@
         }
 
         [Authorize(Roles = "Admin")]
-        public IActionResult All()
+        public IActionResult All(int page = 1)
         {
-            var usersAndRoles = this._usersService.All();
+            var usersAndRoles = this._usersService.All(PageSize, page);
+            usersAndRoles.CurrentPage = page;
+            usersAndRoles.TotalPages = (int)Math.Ceiling(_usersService.Count() / (double)PageSize);
 
             return View(usersAndRoles);
         }
@@ -166,10 +171,12 @@
             var roleExists = await _roleManager.RoleExistsAsync(model.Role);
             var user = await _userManager.FindByIdAsync(model.UserId);
             var userExists = user != null;
-
+            
             if (!roleExists || !userExists)
             {
                 ModelState.AddModelError(string.Empty, "Invalid identity details.");
+                TempData["roleResult"] = "User or role doesnt exist!";
+                return RedirectToAction(nameof(All));
             }
 
             if (!ModelState.IsValid)
@@ -178,8 +185,39 @@
             }
 
             await _userManager.AddToRoleAsync(user, model.Role);
-            TempData["successRoleAdd"] = "Successfully added user to role!";
+            TempData["roleResult"] = user.UserName + " Successfully signed to role " + model.Role;
+            
+            return RedirectToAction(nameof(All), 1);
+        }
 
+        [HttpPost]
+        public async Task<IActionResult> RemoveFromRole(AddUserToRoleFormModel model)
+        {
+            var roleExists = await _roleManager.RoleExistsAsync(model.Role);
+            var user = await _userManager.FindByIdAsync(model.UserId);
+            var userExists = user != null;
+            var userIsInRole = await _userManager.IsInRoleAsync(user, model.Role);
+
+            if (!roleExists || !userExists)
+            {
+                ModelState.AddModelError(string.Empty, "Invalid identity details.");
+                TempData["roleResult"] = "User or role doesnt exist!";
+                return RedirectToAction(nameof(All));
+            }
+
+            if (!ModelState.IsValid)
+            {
+                return RedirectToAction(nameof(All));
+            }
+
+            if(!userIsInRole)
+            {
+                TempData["roleResult"] = user.UserName + " doesn't have the role of " + model.Role;
+                return RedirectToAction(nameof(All));
+            }
+              
+            await _userManager.RemoveFromRoleAsync(user, model.Role);
+            TempData["roleResult"] = user.UserName + " Succesfully removed from the role of " + model.Role;
             return RedirectToAction(nameof(All));
         }
 
