@@ -60,7 +60,7 @@
                         }
                     }
 
-                    var adminEmail = "Admin@dealership.com";
+                    var adminEmail = Configuration.GetSection("AdminEmail").Value.ToString();
                     var adminUser = await userManager.FindByEmailAsync(adminEmail);
 
                     if (adminUser == null)
@@ -71,8 +71,8 @@
                             UserName = adminEmail
                         };
 
-                        await _userManager.CreateAsync(adminUser, "Admin1234@");
-                        await _userManager.AddToRoleAsync(adminUser, "Admin");
+                        await _userManager.CreateAsync(adminUser, Configuration.GetSection("AdminPassword").Value.ToString());
+                        await _userManager.AddToRoleAsync(adminUser, Configuration.GetSection("AdminRole").Value.ToString());
                     }
                 }).Wait();
         }
@@ -150,7 +150,11 @@
         [Authorize(Roles = "Admin")]
         public IActionResult Delete(string id)
         {
-            this._usersService.Delete(id);
+            var user = _usersService.FindById(id);
+            if (user.Email != Configuration.GetSection("AdminEmail").Value.ToString())
+            {
+                this._usersService.Delete(user);
+            }
 
             return RedirectToAction("All");
         }
@@ -201,13 +205,7 @@
         {
             ApplicationUser user = await this._userManager.FindByIdAsync(userId);
 
-            bool isAdmin = String.IsNullOrEmpty(adminRole)
-                ? false
-                : await this._roleManager.RoleExistsAsync(adminRole);
-
-            bool isModerator = String.IsNullOrEmpty(moderatorRole)
-                ? false
-                : await this._roleManager.RoleExistsAsync(moderatorRole);
+            await this._userManager.RemoveFromRolesAsync(user, await _userManager.GetRolesAsync(user));
 
             bool userExists = user != null;
 
@@ -216,27 +214,18 @@
                 return RedirectToAction("All", new { page = 1 });
             }
 
-            if (!isAdmin && !isModerator)
+            var hasAdmin = await _userManager.GetUsersInRoleAsync(Configuration.GetSection("AdminRole").Value.ToString());
+
+            if (hasAdmin.Count <=0)
             {
-                if (user.Email != "Admin@dealership.com")
-                {
-                    await this._userManager.RemoveFromRoleAsync(user, Configuration.GetSection("AdminRole").Value.ToString());
-                }
-
-                await this._userManager.RemoveFromRoleAsync(user, Configuration.GetSection("ModeratorRole").Value.ToString());
-
-                return RedirectToAction("Details", new { id = user.Id });
+                await this._userManager.AddToRoleAsync(user, Configuration.GetSection("AdminRole").Value.ToString());
             }
 
-            if (isModerator)
+            if (!String.IsNullOrEmpty(moderatorRole))
                 await this._userManager.AddToRoleAsync(user, moderatorRole);
-            else
-                await this._userManager.RemoveFromRoleAsync(user, Configuration.GetSection("ModeratorRole").Value.ToString());
 
-            if (isAdmin)
-                await this._userManager.AddToRoleAsync(user, adminRole);
-            else if (user.UserName != "Admin@dealership.com")
-                await this._userManager.RemoveFromRoleAsync(user, Configuration.GetSection("AdminRole").Value.ToString());          
+            if (!String.IsNullOrEmpty(adminRole))
+                await this._userManager.AddToRoleAsync(user, adminRole);     
 
             return RedirectToAction("Details", new { id = user.Id });
         }

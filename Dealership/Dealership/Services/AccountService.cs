@@ -39,22 +39,10 @@
         }
 
 
-        public void Delete(string id)
+        public void Delete(ApplicationUser user)
         {
-            var user = this.db
-                .Users
-                .Where(u => u.Id == id)
-                .FirstOrDefault();
-
-            if (user.Email != "Admin@dealership.com")
-            {
-                this.db.Remove(user);
-                this.db.SaveChanges();
-            }
-            else
-            {
-
-            }
+            this.db.Remove(user);
+            this.db.SaveChanges();
         }
 
         public int Count()

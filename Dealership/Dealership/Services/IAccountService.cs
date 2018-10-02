@@ -15,6 +15,6 @@
 
         IEnumerable<SelectListItem> AllRoles();
 
-        void Delete(string id);
+        void Delete(ApplicationUser user);
     }
 }

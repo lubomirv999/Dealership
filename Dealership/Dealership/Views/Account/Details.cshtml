@@ -21,12 +21,12 @@
 
 <form class="text-center details-info col-lg-12" method="post" asp-controller="Account" asp-action="ManageRoles">
     <input type="hidden" name="userId" value="@Model.User.Id" />
-
-    <label for="adminRole">Admin</label>
-    <input id="adminRole" type="checkbox" name="adminRole" value="Admin" />
-
-    <label for="moderatorRole">Moderator</label>
-    <input id="moderatorRole" type="checkbox" name="moderatorRole" value="Moderator" />
-
+    @foreach (var role in Model.AllRoles)
+    {
+        <div class="form-check">
+            <label for="@(role.Text + "Role")">@role.Text</label>
+            <input id="@(role.Text + "Role")" type="checkbox" name="@(role.Text + "Role")" value="@role.Text" />
+        </div>
+    }
     <button class="btn-warning" type="Submit">Edit</button>
 </form>
