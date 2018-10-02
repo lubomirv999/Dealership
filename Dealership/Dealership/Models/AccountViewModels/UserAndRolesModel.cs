@@ -7,6 +7,8 @@
     {
         public ApplicationUser User { get; set; }
 
-        public IEnumerable<SelectListItem> Roles { get; set; }
+        public IList<string> Roles { get; set; }
+
+        public IEnumerable<SelectListItem> AllRoles { get; set; }
     }
 }

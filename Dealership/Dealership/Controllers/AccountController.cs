@@ -7,7 +7,10 @@
     using Microsoft.AspNetCore.Authorization;
     using Microsoft.AspNetCore.Identity;
     using Microsoft.AspNetCore.Mvc;
+    using Microsoft.AspNetCore.Mvc.Rendering;
+    using Microsoft.Extensions.Configuration;
     using System;
+    using System.Collections.Generic;
     using System.Threading.Tasks;
 
     [Route("[controller]/[action]")]
@@ -20,17 +23,20 @@
         private readonly SignInManager<ApplicationUser> _signInManager;
         private readonly IAccountService _usersService;
         private readonly RoleManager<IdentityRole> _roleManager;
+        private IConfiguration Configuration { get; }
 
         public AccountController(
             IAccountService usersService,
             UserManager<ApplicationUser> userManager,
             SignInManager<ApplicationUser> signInManager,
-            RoleManager<IdentityRole> roleManager)
+            RoleManager<IdentityRole> roleManager,
+            IConfiguration configuration)
         {
             _userManager = userManager;
             _signInManager = signInManager;
             _usersService = usersService;
             _roleManager = roleManager;
+            Configuration = configuration;
 
             Task
                 .Run(async () =>
@@ -174,8 +180,9 @@
         }
 
         [Authorize(Roles = "Admin")]
-        public IActionResult Details(string id)
+        public async Task<IActionResult> Details(string id)
         {
+            IList<string> userRoles = new List<string>();
             var user = _usersService.FindById(id);
 
             if (user == null)
@@ -183,63 +190,55 @@
                 TempData["roleResult"] = "Cannot find the user";
                 return RedirectToAction(nameof(All));
             }
-            return View("Details", new UserAndRolesModel() { User = user, Roles = _usersService.AllRoles() });
+
+            userRoles = await _userManager.GetRolesAsync(user);
+
+            return View("Details", new UserAndRolesModel() { User = user, Roles = userRoles, AllRoles = this._usersService.AllRoles() });
         }
 
         [HttpPost]
-        public async Task<IActionResult> AddToRole(AddUserToRoleFormModel model)
+        public async Task<IActionResult> ManageRoles(string userId, string adminRole, string moderatorRole)
         {
-            var roleExists = await _roleManager.RoleExistsAsync(model.Role);
-            var user = await _userManager.FindByIdAsync(model.UserId);
-            var userExists = user != null;
-            
-            if (!roleExists || !userExists)
+            ApplicationUser user = await this._userManager.FindByIdAsync(userId);
+
+            bool isAdmin = String.IsNullOrEmpty(adminRole)
+                ? false
+                : await this._roleManager.RoleExistsAsync(adminRole);
+
+            bool isModerator = String.IsNullOrEmpty(moderatorRole)
+                ? false
+                : await this._roleManager.RoleExistsAsync(moderatorRole);
+
+            bool userExists = user != null;
+
+            if (!userExists)
             {
-                ModelState.AddModelError(string.Empty, "Invalid identity details.");
-                TempData["roleResult"] = "User or role doesnt exist!";
-                return RedirectToAction(nameof(All));
+                return RedirectToAction("All", new { page = 1 });
             }
 
-            if (!ModelState.IsValid)
+            if (!isAdmin && !isModerator)
             {
-                return RedirectToAction(nameof(All));
+                if (user.Email != "Admin@dealership.com")
+                {
+                    await this._userManager.RemoveFromRoleAsync(user, Configuration.GetSection("AdminRole").Value.ToString());
+                }
+
+                await this._userManager.RemoveFromRoleAsync(user, Configuration.GetSection("ModeratorRole").Value.ToString());
+
+                return RedirectToAction("Details", new { id = user.Id });
             }
 
-            await _userManager.AddToRoleAsync(user, model.Role);
-            TempData["roleResult"] = user.UserName + " Successfully signed to role " + model.Role;
-            
-            return RedirectToAction(nameof(All), 1);
-        }
+            if (isModerator)
+                await this._userManager.AddToRoleAsync(user, moderatorRole);
+            else
+                await this._userManager.RemoveFromRoleAsync(user, Configuration.GetSection("ModeratorRole").Value.ToString());
 
-        [HttpPost]
-        public async Task<IActionResult> RemoveFromRole(AddUserToRoleFormModel model)
-        {
-            var roleExists = await _roleManager.RoleExistsAsync(model.Role);
-            var user = await _userManager.FindByIdAsync(model.UserId);
-            var userExists = user != null;
-            var userIsInRole = await _userManager.IsInRoleAsync(user, model.Role);
+            if (isAdmin)
+                await this._userManager.AddToRoleAsync(user, adminRole);
+            else if (user.UserName != "Admin@dealership.com")
+                await this._userManager.RemoveFromRoleAsync(user, Configuration.GetSection("AdminRole").Value.ToString());          
 
-            if (!roleExists || !userExists)
-            {
-                ModelState.AddModelError(string.Empty, "Invalid identity details.");
-                TempData["roleResult"] = "User or role doesnt exist!";
-                return RedirectToAction(nameof(All));
-            }
-
-            if (!ModelState.IsValid)
-            {
-                return RedirectToAction(nameof(All));
-            }
-
-            if(!userIsInRole)
-            {
-                TempData["roleResult"] = user.UserName + " doesn't have the role of " + model.Role;
-                return RedirectToAction(nameof(All));
-            }
-              
-            await _userManager.RemoveFromRoleAsync(user, model.Role);
-            TempData["roleResult"] = user.UserName + " Succesfully removed from the role of " + model.Role;
-            return RedirectToAction(nameof(All));
+            return RedirectToAction("Details", new { id = user.Id });
         }
 
         #region Helpers

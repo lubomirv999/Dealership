@@ -8,9 +8,13 @@
     public interface IAccountService
     {
         AdminListingUsersModel All(int pageSize, int page = 1);
+
         int Count();
+
         ApplicationUser FindById(string id);
+
         IEnumerable<SelectListItem> AllRoles();
+
         void Delete(string id);
     }
 }

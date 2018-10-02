@@ -4,13 +4,29 @@
     ViewData["Title"] = Model.User.UserName + " Details";
 }
 
-<h1>Details for user @Model.User.UserName</h1>
+<h1 class="text-center all-users col-lg-12 col-md-12 col-sm-12- col-xs-12">Details for user</h1>
+<h2 class="text-center details-info">@Model.User.UserName</h2>
 
-<ul>
+@if (Model.Roles.Any())
+{
+    <h3 class="text-center all-users col-lg-12 col-md-12 col-sm-12- col-xs-12">User is in roles</h3>
 
     @foreach (var role in Model.Roles)
     {
-        <li> @role.Text </li>
+        <h4 class="text-center details-info col-lg-12 col-md-12 col-sm-12- col-xs-12">@role</h4>
     }
+}
 
-</ul>
+<h3 class="text-center all-users">Edit user roles</h3>
+
+<form class="text-center details-info col-lg-12" method="post" asp-controller="Account" asp-action="ManageRoles">
+    <input type="hidden" name="userId" value="@Model.User.Id" />
+
+    <label for="adminRole">Admin</label>
+    <input id="adminRole" type="checkbox" name="adminRole" value="Admin" />
+
+    <label for="moderatorRole">Moderator</label>
+    <input id="moderatorRole" type="checkbox" name="moderatorRole" value="Moderator" />
+
+    <button class="btn-warning" type="Submit">Edit</button>
+</form>

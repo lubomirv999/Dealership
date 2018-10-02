@@ -1,5 +1,6 @@
 ﻿namespace Dealership.Models.AccountViewModels
 {
+    using System.Collections.Generic;
     using System.ComponentModel.DataAnnotations;
 
     public class AddUserToRoleFormModel
@@ -8,6 +9,6 @@
         public string UserId { get; set; }
 
         [Required]
-        public string Role { get; set; }
+        public IList<string> Roles { get; set; }
     }
 }
