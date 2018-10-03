@@ -151,9 +151,16 @@
         public IActionResult Delete(string id)
         {
             var user = _usersService.FindById(id);
-            if (user.Email != Configuration.GetSection("AdminEmail").Value.ToString())
+            bool isAdmin = _userManager.IsInRoleAsync(user, Configuration.GetSection("AdminRole").Value.ToString()).Result;
+            bool lastAdmin = (_userManager.GetUsersInRoleAsync(Configuration.GetSection("AdminRole").Value.ToString()).Result.Count <= 1);
+            if (lastAdmin && isAdmin)
+            {
+                TempData["DeleteResult"] = "You cannot delete the last Admin";
+            }
+            else
             {
                 this._usersService.Delete(user);
+                TempData["DeleteResult"] = "Succesfully Deleted";
             }
 
             return RedirectToAction("All");
