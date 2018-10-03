@@ -201,31 +201,26 @@
         }
 
         [HttpPost]
-        public async Task<IActionResult> ManageRoles(string userId, string adminRole, string moderatorRole)
+        [Authorize(Roles = "Admin")]
+        public async Task<IActionResult> ManageRoles(string userId, string[] roles)
         {
             ApplicationUser user = await this._userManager.FindByIdAsync(userId);
 
             await this._userManager.RemoveFromRolesAsync(user, await _userManager.GetRolesAsync(user));
-
-            bool userExists = user != null;
-
-            if (!userExists)
+            
+            if (user==null)
             {
                 return RedirectToAction("All", new { page = 1 });
             }
 
-            var hasAdmin = await _userManager.GetUsersInRoleAsync(Configuration.GetSection("AdminRole").Value.ToString());
+            var admins = await _userManager.GetUsersInRoleAsync(Configuration.GetSection("AdminRole").Value.ToString());
 
-            if (hasAdmin.Count <=0)
+            if (admins.Count <=0)
             {
                 await this._userManager.AddToRoleAsync(user, Configuration.GetSection("AdminRole").Value.ToString());
             }
 
-            if (!String.IsNullOrEmpty(moderatorRole))
-                await this._userManager.AddToRoleAsync(user, moderatorRole);
-
-            if (!String.IsNullOrEmpty(adminRole))
-                await this._userManager.AddToRoleAsync(user, adminRole);     
+            await this._userManager.AddToRolesAsync(user, roles);              
 
             return RedirectToAction("Details", new { id = user.Id });
         }
