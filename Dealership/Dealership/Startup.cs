@@ -53,17 +53,19 @@
 
             app.UseStaticFiles();
 
-            using (var scope = app.ApplicationServices.GetRequiredService<IServiceScopeFactory>().CreateScope())
-            {
-                var context = scope.ServiceProvider.GetService<DealershipDbContext>();
-                var users = scope.ServiceProvider.GetService<UserManager<ApplicationUser>>();
-                var roles = scope.ServiceProvider.GetService<RoleManager<IdentityRole>>();
-                var config = scope.ServiceProvider.GetService<IConfiguration>();
+            if (!DealershipDbContextExtentions.DatabaseExists(this.Configuration))
+            {                
+                using (var scope = app.ApplicationServices.GetRequiredService<IServiceScopeFactory>().CreateScope())
+                {
+                    var context = scope.ServiceProvider.GetService<DealershipDbContext>();
+                    var users = scope.ServiceProvider.GetService<UserManager<ApplicationUser>>();
+                    var roles = scope.ServiceProvider.GetService<RoleManager<IdentityRole>>();
+                    var config = scope.ServiceProvider.GetService<IConfiguration>();
 
-                context.Database.Migrate();
-                context.SaveChanges();
-                context.EnsureDbSeeded(users, roles, config);
-                context.SaveChanges();
+                    context.Database.Migrate();
+
+                    DealershipDbContextExtentions.EnsureDbSeeded(context, users, roles, config);
+                }
             }
 
             app.UseAuthentication();

@@ -116,7 +116,6 @@
             bool isAdmin = _userManager.IsInRoleAsync(user, Configuration.GetSection("AdminRole").Value.ToString()).Result;
             bool lastAdmin = (_userManager.GetUsersInRoleAsync(Configuration.GetSection("AdminRole").Value.ToString()).Result.Count <= 1);
 
-
             if (user.UserName == User.Identity.Name)
             {
                 TempData["DeleteResult"] = "Cannot delete your profile!";
@@ -182,26 +181,32 @@
         [Authorize(Roles = "Admin")]
         public async Task<IActionResult> ManageRoles(string userId, string[] roles)
         {
+            string adminRole = Configuration.GetSection("AdminRole").Value.ToString();
             ApplicationUser user = await this._userManager.FindByIdAsync(userId);
-
-            await this._userManager.RemoveFromRolesAsync(user, await _userManager.GetRolesAsync(user));
 
             if (user == null)
             {
                 return RedirectToAction("All", new { page = 1 });
             }
 
-            var admins = _userManager.GetUsersInRoleAsync(Configuration.GetSection("AdminRole").Value.ToString()).Result.Count;
+            await this._userManager.RemoveFromRolesAsync(user, await _userManager.GetRolesAsync(user));
+            await this._userManager.AddToRolesAsync(user, roles);
 
-            if (admins <= 0)
+            if (user.UserName == User.Identity.Name)
             {
-                await this._userManager.AddToRolesAsync(user, roles);
-                await this._userManager.AddToRoleAsync(user, Configuration.GetSection("AdminRole").Value.ToString());
+                var admins = _userManager.GetUsersInRoleAsync(adminRole).Result.Count;
+
+                if (admins == 0)
+                {
+                    await this._userManager.AddToRoleAsync(user, adminRole);
+                }
+
+                if (!await this._userManager.IsInRoleAsync(user, adminRole))
+                {
+                    await this.Logout();
+                }
             }
-            else
-            {
-                await this._userManager.AddToRolesAsync(user, roles);
-            }
+
             return RedirectToAction("Details", new { id = user.Id });
         }
 

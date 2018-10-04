@@ -1,12 +1,15 @@
 ﻿namespace Dealership.Data
 {
     using Dealership.Models;
-    using Dealership.Services;
     using Microsoft.AspNetCore.Identity;
     using Microsoft.Extensions.Configuration;
+    using System;
+    using System.Data.SqlClient;
+
     public static class DealershipDbContextExtentions
     {
-        public static void EnsureDbSeeded(this DealershipDbContext context,
+        public static void EnsureDbSeeded(
+            DealershipDbContext context,
             UserManager<ApplicationUser> userManager,
             RoleManager<IdentityRole> roleManager,
             IConfiguration configuration)
@@ -45,6 +48,23 @@
 
                 userManager.CreateAsync(adminUser, configuration.GetSection("AdminPassword").Value.ToString()).Wait();
                 userManager.AddToRoleAsync(adminUser, configuration.GetSection("AdminRole").Value.ToString()).Wait();
+            }
+        }
+
+        public static bool DatabaseExists(IConfiguration configuration)
+        {
+            try
+            {
+                using (SqlConnection conn = new SqlConnection(configuration.GetConnectionString("DefaultConnection")))
+                {
+                    conn.Open();
+                }
+
+                return true;
+            }
+            catch
+            {
+                return false;
             }
         }
     }
