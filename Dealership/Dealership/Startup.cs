@@ -59,6 +59,7 @@
                 var users = scope.ServiceProvider.GetService<UserManager<ApplicationUser>>();
                 var roles = scope.ServiceProvider.GetService<RoleManager<IdentityRole>>();
                 var config = scope.ServiceProvider.GetService<IConfiguration>();
+
                 context.Database.Migrate();
                 context.SaveChanges();
                 context.EnsureDbSeeded(users, roles, config);

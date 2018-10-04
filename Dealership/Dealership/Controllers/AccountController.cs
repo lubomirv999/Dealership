@@ -115,6 +115,15 @@
             var user = _usersService.FindById(id);
             bool isAdmin = _userManager.IsInRoleAsync(user, Configuration.GetSection("AdminRole").Value.ToString()).Result;
             bool lastAdmin = (_userManager.GetUsersInRoleAsync(Configuration.GetSection("AdminRole").Value.ToString()).Result.Count <= 1);
+
+
+            if (user.UserName == User.Identity.Name)
+            {
+                TempData["DeleteResult"] = "Cannot delete your profile!";
+
+                return RedirectToAction("All");
+            }
+
             if (lastAdmin && isAdmin)
             {
                 TempData["DeleteResult"] = "You cannot delete the last Admin";
@@ -176,15 +185,15 @@
             ApplicationUser user = await this._userManager.FindByIdAsync(userId);
 
             await this._userManager.RemoveFromRolesAsync(user, await _userManager.GetRolesAsync(user));
-            
-            if (user==null)
+
+            if (user == null)
             {
                 return RedirectToAction("All", new { page = 1 });
             }
 
-            var admins = await _userManager.GetUsersInRoleAsync(Configuration.GetSection("AdminRole").Value.ToString());
+            var admins = _userManager.GetUsersInRoleAsync(Configuration.GetSection("AdminRole").Value.ToString()).Result.Count;
 
-            if (admins.Count <=0)
+            if (admins <= 0)
             {
                 await this._userManager.AddToRolesAsync(user, roles);
                 await this._userManager.AddToRoleAsync(user, Configuration.GetSection("AdminRole").Value.ToString());
@@ -192,7 +201,7 @@
             else
             {
                 await this._userManager.AddToRolesAsync(user, roles);
-            }             
+            }
             return RedirectToAction("Details", new { id = user.Id });
         }
 
