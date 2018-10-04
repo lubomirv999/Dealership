@@ -37,44 +37,6 @@
             _usersService = usersService;
             _roleManager = roleManager;
             Configuration = configuration;
-
-            Task
-                .Run(async () =>
-                {
-                    var roles = new[]
-                       {
-                            "Admin",
-                            "Moderator"
-                        };
-
-                    foreach (var role in roles)
-                    {
-                        var roleExists = await _roleManager.RoleExistsAsync(role);
-
-                        if (!roleExists)
-                        {
-                            await _roleManager.CreateAsync(new IdentityRole
-                            {
-                                Name = role
-                            });
-                        }
-                    }
-
-                    var adminEmail = Configuration.GetSection("AdminEmail").Value.ToString();
-                    var adminUser = await userManager.FindByEmailAsync(adminEmail);
-
-                    if (adminUser == null)
-                    {
-                        adminUser = new ApplicationUser
-                        {
-                            Email = adminEmail,
-                            UserName = adminEmail
-                        };
-
-                        await _userManager.CreateAsync(adminUser, Configuration.GetSection("AdminPassword").Value.ToString());
-                        await _userManager.AddToRoleAsync(adminUser, Configuration.GetSection("AdminRole").Value.ToString());
-                    }
-                }).Wait();
         }
 
         [TempData]
@@ -224,11 +186,13 @@
 
             if (admins.Count <=0)
             {
+                await this._userManager.AddToRolesAsync(user, roles);
                 await this._userManager.AddToRoleAsync(user, Configuration.GetSection("AdminRole").Value.ToString());
             }
-
-            await this._userManager.AddToRolesAsync(user, roles);              
-
+            else
+            {
+                await this._userManager.AddToRolesAsync(user, roles);
+            }             
             return RedirectToAction("Details", new { id = user.Id });
         }
 

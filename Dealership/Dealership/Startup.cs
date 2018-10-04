@@ -39,7 +39,7 @@
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
         public void Configure(IApplicationBuilder app, IHostingEnvironment env)
-        {            
+        {
             if (env.IsDevelopment())
             {
                 app.UseDeveloperExceptionPage();
@@ -52,6 +52,18 @@
             }
 
             app.UseStaticFiles();
+
+            using (var scope = app.ApplicationServices.GetRequiredService<IServiceScopeFactory>().CreateScope())
+            {
+                var context = scope.ServiceProvider.GetService<DealershipDbContext>();
+                var users = scope.ServiceProvider.GetService<UserManager<ApplicationUser>>();
+                var roles = scope.ServiceProvider.GetService<RoleManager<IdentityRole>>();
+                var config = scope.ServiceProvider.GetService<IConfiguration>();
+                context.Database.Migrate();
+                context.SaveChanges();
+                context.EnsureDbSeeded(users, roles, config);
+                context.SaveChanges();
+            }
 
             app.UseAuthentication();
 

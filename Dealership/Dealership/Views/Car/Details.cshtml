@@ -6,6 +6,14 @@
 
 <h1 class="text-center">Car Details</h1>
 
+@if (User.IsInRole("Moderator"))
+{
+<div class=" text-center col-lg-12 col-md-12 col-sm-12 col-xs-12">
+    <a class="btn btn-warning btn-md edit-car-all-btn" asp-controller="Car" asp-action="Edit" asp-route-id="@Model.Id">Edit</a>
+    <a class="btn btn-danger btn-md delete-car-all-btn" asp-controller="Car" asp-action="Delete" asp-route-id="@Model.Id">Delete</a>
+</div>
+}
+
 <div class="col-md-8 col-md-offset-2 details-page-heading">
     <div class="pull-left">
         <h3>@Model.Manufacturer @Model.Model</h3>
