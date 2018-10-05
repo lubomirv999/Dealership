@@ -12,9 +12,10 @@ using System;
 namespace Dealership.Migrations
 {
     [DbContext(typeof(DealershipDbContext))]
-    partial class DealershipDbContextModelSnapshot : ModelSnapshot
+    [Migration("20181005104239_CommentsFinishedEdit")]
+    partial class CommentsFinishedEdit
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -70,21 +71,20 @@ namespace Dealership.Migrations
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd();
 
+                    b.Property<string>("Author")
+                        .HasMaxLength(70);
+
                     b.Property<int>("CarId");
 
                     b.Property<string>("Content")
                         .IsRequired()
                         .HasMaxLength(500);
 
-                    b.Property<int?>("ParentCommentId");
-
-                    b.Property<string>("UserId");
+                    b.Property<int?>("ReplyTo");
 
                     b.HasKey("Id");
 
                     b.HasIndex("CarId");
-
-                    b.HasIndex("UserId");
 
                     b.ToTable("Comments");
                 });
@@ -271,10 +271,6 @@ namespace Dealership.Migrations
                         .WithMany("Comments")
                         .HasForeignKey("CarId")
                         .OnDelete(DeleteBehavior.Cascade);
-
-                    b.HasOne("Dealership.Models.ApplicationUser", "Author")
-                        .WithMany("Comments")
-                        .HasForeignKey("UserId");
                 });
 
             modelBuilder.Entity("Dealership.Data.Image", b =>

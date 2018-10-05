@@ -6,10 +6,10 @@
     using Dealership.Services;
     using Microsoft.AspNetCore.Authorization;
     using Microsoft.AspNetCore.Http;
+    using Microsoft.AspNetCore.Identity;
     using Microsoft.AspNetCore.Mvc;
     using System;
     using System.Collections.Generic;
-    using System.Linq;
 
     public class CarController : Controller
     {
@@ -17,11 +17,15 @@
 
         private readonly ICarService carsService;
         private readonly IEmailService emailService;
+        private readonly UserManager<ApplicationUser> userManager;
+        private readonly ICommentService commentService;
 
-        public CarController(ICarService carsService, IEmailService emailService)
+        public CarController(ICarService carsService, IEmailService emailService, ICommentService commentService, UserManager<ApplicationUser> userManager)
         {
             this.carsService = carsService;
             this.emailService = emailService;
+            this.commentService = commentService;
+            this.userManager = userManager;
         }
 
         public IActionResult AllCars(string sort, string searchQuery, int page = 1)
@@ -168,7 +172,23 @@
 
             return View(car);
         }
-        
+
+        [Authorize]
+        public IActionResult AddComment(int id, string content, int? parentCommentId)
+        {
+            var carExists = this.carsService.Exists(id);
+            var userId = this.userManager.GetUserAsync(HttpContext.User).Id.ToString();
+
+            if (!carExists)
+            {
+                return NotFound();
+            }
+
+            this.commentService.Add(id, content, userId ,parentCommentId);
+
+            return RedirectToAction("Details", new { id = id });
+        }
+
         [HttpPost]
         [Authorize(Roles = "Moderator")]
         public void DeletePhoto(int photoId)

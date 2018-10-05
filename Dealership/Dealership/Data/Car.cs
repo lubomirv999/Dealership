@@ -63,5 +63,7 @@
         public decimal Price { get; set; }
 
         public ICollection<Image> Images { get; set; }
+
+        public ICollection<Comment> Comments { get; set; }
     }
 }

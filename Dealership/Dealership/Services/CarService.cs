@@ -199,6 +199,8 @@
                 => this.db
                     .Cars
                     .Include("Images")
+                    .Include(c => c.Comments)
+                    .ThenInclude(a => a.Author)
                     .Where(c => c.Id == id)
                     .FirstOrDefault();
 

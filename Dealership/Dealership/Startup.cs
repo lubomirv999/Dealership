@@ -34,6 +34,7 @@
             services.AddTransient<ICarService, CarService>();
             services.AddTransient<IEmailService, EmailService>();
             services.AddTransient<IAccountService, AccountService>();
+            services.AddTransient<ICommentService, CommentService>();
 
             services.AddMvc();
         }

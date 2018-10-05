@@ -15,12 +15,29 @@
 
         public DbSet<Image> Images { get; set; }
 
+        public DbSet<Comment> Comments { get; set; }
+
         protected override void OnModelCreating(ModelBuilder builder)
         {
             builder.Entity<Car>()
                 .HasMany(c => c.Images)
                 .WithOne(i => i.Car)
                 .HasForeignKey(i => i.CarId);
+
+            builder.Entity<Car>()
+                .HasMany(c => c.Comments)
+                .WithOne(c => c.Car)
+                .HasForeignKey(i => i.CarId);
+
+            builder.Entity<Comment>()
+                .HasOne(c => c.Author)
+                .WithMany(a => a.Comments)
+                .HasForeignKey(c => c.UserId);
+
+            //builder.Entity<Comment>()
+            //    .HasMany(c => c.Replies)
+            //    .WithOne(c => c)
+            //    .HasForeignKey(c => c.ParentCommentId);
 
             base.OnModelCreating(builder);
             // Customize the ASP.NET Identity model and override the defaults if needed.
