@@ -1,6 +1,7 @@
 ﻿namespace Dealership
 {
     using Dealership.Data;
+    using Dealership.Migrations;
     using Dealership.Models;
     using Dealership.Services;
     using Microsoft.AspNetCore.Builder;
@@ -54,18 +55,12 @@
             app.UseStaticFiles();
 
             if (!DealershipDbContextExtentions.DatabaseExists(this.Configuration))
-            {                
-                using (var scope = app.ApplicationServices.GetRequiredService<IServiceScopeFactory>().CreateScope())
-                {
-                    var context = scope.ServiceProvider.GetService<DealershipDbContext>();
-                    var users = scope.ServiceProvider.GetService<UserManager<ApplicationUser>>();
-                    var roles = scope.ServiceProvider.GetService<RoleManager<IdentityRole>>();
-                    var config = scope.ServiceProvider.GetService<IConfiguration>();
+            {
+                var scope = app.ApplicationServices.GetRequiredService<IServiceScopeFactory>().CreateScope();
+                var context = scope.ServiceProvider.GetService<DealershipDbContext>();
 
-                    context.Database.Migrate();
-
-                    DealershipDbContextExtentions.EnsureDbSeeded(context, users, roles, config);
-                }
+                new SeedData().InitialDependencies(app);
+                context.Database.Migrate();
             }
 
             app.UseAuthentication();
