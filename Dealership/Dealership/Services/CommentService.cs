@@ -3,6 +3,7 @@
     using Dealership.Data;
     using Dealership.Models;
     using Microsoft.AspNetCore.Identity;
+    using System.Linq;
 
     public class CommentService : ICommentService
     {
@@ -23,10 +24,19 @@
             comment.CarId = carId;
             comment.Content = content;
             comment.UserId = author.Id;
-            comment.ParentCommentId = parentCommentId;
+            comment.ParentComment = FindById(parentCommentId);
 
             this._db.Comments.Add(comment);
             this._db.SaveChanges();
+        }
+
+        public Comment FindById(int? commentId)
+        {
+            if(commentId == null)
+            {
+                return null;
+            }
+            return this._db.Comments.FirstOrDefault(c => c.Id == commentId);
         }
     }
 }

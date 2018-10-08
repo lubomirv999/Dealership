@@ -3,6 +3,7 @@
     using Dealership.Models;
     using System.Collections.Generic;
     using System.ComponentModel.DataAnnotations;
+    using System.ComponentModel.DataAnnotations.Schema;
 
     public class Comment
     {
@@ -14,13 +15,19 @@
         public string Content { get; set; }
 
         public int? ParentCommentId { get; set; }
+
+        [Required]
+        [ForeignKey("ParentCommentId")]
+        public virtual Comment ParentComment { get; set; }
         
         public int CarId { get; set; }
 
-        public Car Car { get; set; }
+        [ForeignKey("CarId")]
+        public virtual Car Car { get; set; }
 
         public string UserId { get; set; }
 
+        [ForeignKey("UserId")]
         public ApplicationUser Author { get; set; }
     }
 }

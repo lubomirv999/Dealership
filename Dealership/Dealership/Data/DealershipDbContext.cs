@@ -34,15 +34,16 @@
                 .WithMany(a => a.Comments)
                 .HasForeignKey(c => c.UserId);
 
-            //builder.Entity<Comment>()
-            //    .HasMany(c => c.Replies)
-            //    .WithOne(c => c)
-            //    .HasForeignKey(c => c.ParentCommentId);
+            builder.Entity<Comment>()
+                .HasOne(c => c.ParentComment)
+                .WithMany()
+                .HasForeignKey(c => c.ParentCommentId);
 
             base.OnModelCreating(builder);
             // Customize the ASP.NET Identity model and override the defaults if needed.
             // For example, you can rename the ASP.NET Identity table names and more.
             // Add your customizations after calling base.OnModelCreating(builder);
+
         }
     }
 }
