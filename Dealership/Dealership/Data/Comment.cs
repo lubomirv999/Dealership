@@ -19,13 +19,11 @@
         public Comment ParentComment { get; set; }
         
         public int CarId { get; set; }
-
-        [ForeignKey("CarId")]
-        public virtual Car Car { get; set; }
+        
+        public Car Car { get; set; }
 
         public string UserId { get; set; }
-
-        [ForeignKey("UserId")]
+        
         public ApplicationUser Author { get; set; }
     }
 }
