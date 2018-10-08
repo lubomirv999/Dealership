@@ -49,9 +49,7 @@
             migrationBuilder.CreateIndex(
                 name: "IX_Comments_ParentCommentId",
                 table: "Comments",
-                column: "ParentCommentId",
-                unique: true,
-                filter: "[ParentCommentId] IS NOT NULL");
+                column: "ParentCommentId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_Comments_UserId",

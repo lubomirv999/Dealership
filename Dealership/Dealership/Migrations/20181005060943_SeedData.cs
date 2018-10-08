@@ -55,6 +55,7 @@
 
                 _userManager.CreateAsync(adminUser, _configuration.GetSection("AdminPassword").Value.ToString()).Wait();
                 _userManager.AddToRoleAsync(adminUser, _configuration.GetSection("AdminRole").Value.ToString()).Wait();
+                _userManager.AddToRoleAsync(adminUser, _configuration.GetSection("ModeratorRole").Value.ToString()).Wait();
             }
         }
 

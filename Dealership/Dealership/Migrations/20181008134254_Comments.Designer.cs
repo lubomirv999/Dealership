@@ -12,7 +12,7 @@ using System;
 namespace Dealership.Migrations
 {
     [DbContext(typeof(DealershipDbContext))]
-    [Migration("20181008131943_Comments")]
+    [Migration("20181008134254_Comments")]
     partial class Comments
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -85,9 +85,7 @@ namespace Dealership.Migrations
 
                     b.HasIndex("CarId");
 
-                    b.HasIndex("ParentCommentId")
-                        .IsUnique()
-                        .HasFilter("[ParentCommentId] IS NOT NULL");
+                    b.HasIndex("ParentCommentId");
 
                     b.HasIndex("UserId");
 
@@ -278,8 +276,8 @@ namespace Dealership.Migrations
                         .OnDelete(DeleteBehavior.Cascade);
 
                     b.HasOne("Dealership.Data.Comment", "ParentComment")
-                        .WithOne()
-                        .HasForeignKey("Dealership.Data.Comment", "ParentCommentId")
+                        .WithMany()
+                        .HasForeignKey("ParentCommentId")
                         .OnDelete(DeleteBehavior.Restrict);
 
                     b.HasOne("Dealership.Models.ApplicationUser", "Author")

@@ -36,8 +36,8 @@
 
             builder.Entity<Comment>()
                 .HasOne(c => c.ParentComment)
-                .WithOne()
-                .HasForeignKey<Comment>(c => c.ParentCommentId)
+                .WithMany()
+                .HasForeignKey(c => c.ParentCommentId)
                 .OnDelete(DeleteBehavior.Restrict);
 
             base.OnModelCreating(builder);

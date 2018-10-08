@@ -84,9 +84,7 @@ namespace Dealership.Migrations
 
                     b.HasIndex("CarId");
 
-                    b.HasIndex("ParentCommentId")
-                        .IsUnique()
-                        .HasFilter("[ParentCommentId] IS NOT NULL");
+                    b.HasIndex("ParentCommentId");
 
                     b.HasIndex("UserId");
 
@@ -277,8 +275,8 @@ namespace Dealership.Migrations
                         .OnDelete(DeleteBehavior.Cascade);
 
                     b.HasOne("Dealership.Data.Comment", "ParentComment")
-                        .WithOne()
-                        .HasForeignKey("Dealership.Data.Comment", "ParentCommentId")
+                        .WithMany()
+                        .HasForeignKey("ParentCommentId")
                         .OnDelete(DeleteBehavior.Restrict);
 
                     b.HasOne("Dealership.Models.ApplicationUser", "Author")
