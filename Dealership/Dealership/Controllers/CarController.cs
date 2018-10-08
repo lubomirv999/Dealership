@@ -191,6 +191,13 @@
 
         [HttpPost]
         [Authorize(Roles = "Moderator")]
+        public void DeleteComment(int commentId)
+        {
+            this.commentService.Delete(commentId);
+        }
+
+        [HttpPost]
+        [Authorize(Roles = "Moderator")]
         public void DeletePhoto(int photoId)
         {
             this.carsService.DeletePhoto(photoId);

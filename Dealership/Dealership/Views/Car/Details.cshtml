@@ -104,38 +104,53 @@
 
             @if (comment.ParentCommentId == null)
             {
-                <div class="well">
+                <div class="well comment">
                     <h1>@comment.Author.UserName</h1>
                     <h2>@comment.Content</h2>
+
+                    @if (User.IsInRole("Moderator"))
+                    {
+                        <button data-commentId="@comment.Id" class="btn delete-comment-btn">Delete comment</button>
+                    }
 
                     @foreach (var subCom in Model.Comments)
                     {
                         @if (subCom.ParentCommentId == comment.Id)
                         {
-                    <div class="col-md-offset-1 col-lg-offset-1 table-bordered">
-                        <h3>@subCom.Author.UserName</h3>
-                        <h4>@subCom.Content</h4>
-                    </div>
+                            <div class="col-md-offset-1 col-lg-offset-1 table-bordered comment">
+                                <h3>@subCom.Author.UserName</h3>
+                                <h4>@subCom.Content</h4>
+                                @if (User.IsInRole("Moderator"))
+                                {
+                                    <button data-commentId="@subCom.Id" class="btn delete-comment-btn">Delete comment</button>
+                                }
+                            </div>
                         }
                     }
-                    <form asp-controller="Car" asp-action="AddComment" asp-route-id="@Model.Id" asp-route-parentCommentId="@comment.Id">
-                        <input id="content" type="text" name="content" />
-                        <input type="submit" value="Reply" />
-                    </form>
+                    @if (User.Identity.IsAuthenticated)
+                    {
+                        <form asp-controller="Car" asp-action="AddComment" asp-route-id="@Model.Id" asp-route-parentCommentId="@comment.Id">
+                            <input id="content" type="text" name="content" />
+                            <input type="submit" value="Reply" />
+                        </form>
+                    }
                 </div>
             }
 
         }
     }
 
-
-    <form asp-controller="Car" asp-action="AddComment" asp-route-id="@Model.Id">
-        <input id="content" type="text" name="content" />
-        <input type="submit" value="Comment" />
-    </form>    
+    @if (User.Identity.IsAuthenticated)
+    {
+        <form asp-controller="Car" asp-action="AddComment" asp-route-id="@Model.Id">
+            <input id="content" type="text" name="content" />
+            <input type="submit" value="Comment" />
+        </form>
+    }
 </div>
 
 @TempData["test"]
 
 <script src="~/lib/jquery/dist/jquery.js"></script>
 <script src="~/js/add-content-comment.js"></script>
+<script src="~/js/delete-comment.js"></script>
