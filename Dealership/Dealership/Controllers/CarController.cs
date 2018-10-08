@@ -177,14 +177,14 @@
         public IActionResult AddComment(int id, string content, int? parentCommentId)
         {
             var carExists = this.carsService.Exists(id);
-            var userId = this.userManager.GetUserAsync(HttpContext.User).Id.ToString();
+            ApplicationUser user = this.userManager.GetUserAsync(HttpContext.User).Result;         
 
             if (!carExists)
             {
                 return NotFound();
             }
 
-            this.commentService.Add(id, content, userId ,parentCommentId);
+            this.commentService.Add(id, content, user.Id, parentCommentId);
 
             return RedirectToAction("Details", new { id = id });
         }

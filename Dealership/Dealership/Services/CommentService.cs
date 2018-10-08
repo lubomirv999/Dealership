@@ -22,7 +22,7 @@
             Comment comment = new Comment();
             comment.CarId = carId;
             comment.Content = content;
-            comment.Author = author;
+            comment.UserId = author.Id;
             comment.ParentCommentId = parentCommentId;
 
             this._db.Comments.Add(comment);

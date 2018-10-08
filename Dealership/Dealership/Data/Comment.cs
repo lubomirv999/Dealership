@@ -14,8 +14,6 @@
         public string Content { get; set; }
 
         public int? ParentCommentId { get; set; }
-
-        //public List<Comment> Replies { get; set; }
         
         public int CarId { get; set; }
 
