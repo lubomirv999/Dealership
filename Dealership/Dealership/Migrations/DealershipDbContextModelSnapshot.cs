@@ -76,13 +76,7 @@ namespace Dealership.Migrations
                         .IsRequired()
                         .HasMaxLength(500);
 
-                    b.Property<int?>("ParentCommentId")
-                        .IsRequired();
-
-                    b.Property<int?>("ParentCommentId1")
-                        .IsRequired();
-
-                    b.Property<int>("ParentCommentId2");
+                    b.Property<int?>("ParentCommentId");
 
                     b.Property<string>("UserId");
 
@@ -90,9 +84,11 @@ namespace Dealership.Migrations
 
                     b.HasIndex("CarId");
 
-                    b.HasIndex("UserId");
+                    b.HasIndex("ParentCommentId")
+                        .IsUnique()
+                        .HasFilter("[ParentCommentId] IS NOT NULL");
 
-                    b.HasIndex("ParentCommentId2", "ParentCommentId1");
+                    b.HasIndex("UserId");
 
                     b.ToTable("Comments");
                 });
@@ -280,15 +276,14 @@ namespace Dealership.Migrations
                         .HasForeignKey("CarId")
                         .OnDelete(DeleteBehavior.Cascade);
 
+                    b.HasOne("Dealership.Data.Comment", "ParentComment")
+                        .WithOne()
+                        .HasForeignKey("Dealership.Data.Comment", "ParentCommentId")
+                        .OnDelete(DeleteBehavior.Restrict);
+
                     b.HasOne("Dealership.Models.ApplicationUser", "Author")
                         .WithMany("Comments")
                         .HasForeignKey("UserId");
-
-                    b.HasOne("Dealership.Data.Comment", "ParentComment")
-                        .WithMany()
-                        .HasForeignKey("ParentCommentId2", "ParentCommentId1")
-                        .HasPrincipalKey("Id", "ParentCommentId")
-                        .OnDelete(DeleteBehavior.Cascade);
                 });
 
             modelBuilder.Entity("Dealership.Data.Image", b =>

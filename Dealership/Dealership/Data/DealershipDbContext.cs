@@ -36,8 +36,9 @@
 
             builder.Entity<Comment>()
                 .HasOne(c => c.ParentComment)
-                .WithMany()
-                .HasForeignKey(c => c.ParentCommentId);
+                .WithOne()
+                .HasForeignKey<Comment>(c => c.ParentCommentId)
+                .OnDelete(DeleteBehavior.Restrict);
 
             base.OnModelCreating(builder);
             // Customize the ASP.NET Identity model and override the defaults if needed.

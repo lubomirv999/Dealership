@@ -129,7 +129,7 @@
                     }
                     @if (User.Identity.IsAuthenticated)
                     {
-                        <form asp-controller="Car" asp-action="AddComment" asp-route-id="@Model.Id" asp-route-parentCommentId="@comment.Id">
+                        <form asp-controller="Car" asp-action="AddComment" asp-route-carId="@Model.Id" asp-route-parentCommentId="@comment.Id">
                             <input id="content" type="text" name="content" />
                             <input type="submit" value="Reply" />
                         </form>
@@ -142,7 +142,7 @@
 
     @if (User.Identity.IsAuthenticated)
     {
-        <form asp-controller="Car" asp-action="AddComment" asp-route-id="@Model.Id">
+        <form asp-controller="Car" asp-action="AddComment" asp-route-carId="@Model.Id">
             <input id="content" type="text" name="content" />
             <input type="submit" value="Comment" />
         </form>

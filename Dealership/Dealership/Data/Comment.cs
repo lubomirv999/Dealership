@@ -13,12 +13,10 @@
         [MinLength(10)]
         [MaxLength(500)]
         public string Content { get; set; }
-
+        
         public int? ParentCommentId { get; set; }
-
-        [Required]
-        [ForeignKey("ParentCommentId")]
-        public virtual Comment ParentComment { get; set; }
+        
+        public Comment ParentComment { get; set; }
         
         public int CarId { get; set; }
 

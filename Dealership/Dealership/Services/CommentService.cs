@@ -33,20 +33,23 @@
         public void Delete(int commentId)
         {
             var commentToRemove = FindById(commentId);
-            if(commentToRemove.ParentCommentId ==null)
+
+            if (commentToRemove.ParentCommentId == null)
             {
                 this._db.Comments.RemoveRange(this._db.Comments.Where(c => c.ParentCommentId == commentId));
             }
+
             this._db.Comments.Remove(FindById(commentId));
             this._db.SaveChanges();
         }
 
         public Comment FindById(int? commentId)
         {
-            if(commentId == null)
+            if (commentId == null)
             {
                 return null;
             }
+
             return this._db.Comments.FirstOrDefault(c => c.Id == commentId);
         }
     }

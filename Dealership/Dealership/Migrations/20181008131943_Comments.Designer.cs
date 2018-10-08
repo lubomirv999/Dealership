@@ -12,8 +12,8 @@ using System;
 namespace Dealership.Migrations
 {
     [DbContext(typeof(DealershipDbContext))]
-    [Migration("20181005103958_CommentsFinished")]
-    partial class CommentsFinished
+    [Migration("20181008131943_Comments")]
+    partial class Comments
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -71,19 +71,25 @@ namespace Dealership.Migrations
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd();
 
-                    b.Property<string>("Author");
-
                     b.Property<int>("CarId");
 
                     b.Property<string>("Content")
                         .IsRequired()
                         .HasMaxLength(500);
 
-                    b.Property<int?>("ReplyTo");
+                    b.Property<int?>("ParentCommentId");
+
+                    b.Property<string>("UserId");
 
                     b.HasKey("Id");
 
                     b.HasIndex("CarId");
+
+                    b.HasIndex("ParentCommentId")
+                        .IsUnique()
+                        .HasFilter("[ParentCommentId] IS NOT NULL");
+
+                    b.HasIndex("UserId");
 
                     b.ToTable("Comments");
                 });
@@ -270,6 +276,15 @@ namespace Dealership.Migrations
                         .WithMany("Comments")
                         .HasForeignKey("CarId")
                         .OnDelete(DeleteBehavior.Cascade);
+
+                    b.HasOne("Dealership.Data.Comment", "ParentComment")
+                        .WithOne()
+                        .HasForeignKey("Dealership.Data.Comment", "ParentCommentId")
+                        .OnDelete(DeleteBehavior.Restrict);
+
+                    b.HasOne("Dealership.Models.ApplicationUser", "Author")
+                        .WithMany("Comments")
+                        .HasForeignKey("UserId");
                 });
 
             modelBuilder.Entity("Dealership.Data.Image", b =>

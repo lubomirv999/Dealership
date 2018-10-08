@@ -174,19 +174,19 @@
         }
 
         [Authorize]
-        public IActionResult AddComment(int id, string content, int? parentCommentId)
+        public IActionResult AddComment(int carId, string content, int? parentCommentId)
         {
-            var carExists = this.carsService.Exists(id);
-            ApplicationUser user = this.userManager.GetUserAsync(HttpContext.User).Result;         
+            var carExists = this.carsService.Exists(carId);
+            ApplicationUser user = this.userManager.GetUserAsync(HttpContext.User).Result;            
 
             if (!carExists)
             {
                 return NotFound();
             }
 
-            this.commentService.Add(id, content, user.Id, parentCommentId);
+            this.commentService.Add(carId, content, user.Id, parentCommentId);
 
-            return RedirectToAction("Details", new { id = id });
+            return RedirectToAction("Details", new { id = carId });
         }
 
         [HttpPost]
