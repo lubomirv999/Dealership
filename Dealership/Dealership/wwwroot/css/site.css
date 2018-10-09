@@ -671,6 +671,59 @@ input[type=text]:focus, textarea:focus {
     height: 200px;
 }
 
+.no-comments{
+    font-size: 1.3em;
+}
+
+.comment {
+    border-radius: 15px;
+    padding: 25px;
+    margin-bottom: 15px;
+}
+
+.comment:hover {
+    background-color: lightblue;    
+}
+
+.author {
+    font-size: 1.3em;
+}
+
+.authorName, .content-text {
+    font-weight: bold;
+}
+
+.content{
+    font-size: 1.2em;
+}
+
+.reply{
+    font-size: 1em;
+    padding: 15px 0 15px 0;   
+}
+
+.reply-author, .reply-content {
+    font-weight: bold;
+}
+
+.reply-content{
+    font-size: 0.9em;
+}
+
+.comment-form {
+    background-color: lightblue;
+    border-radius: 15px;
+    padding: 15px;
+}
+
+.reply-form {
+    margin-bottom: 20px;
+}
+
+.delete-comment-btn {
+    margin-bottom: 25px;
+}
+
 /* Details Page */
 
 /* Pagination Disabled Btns */

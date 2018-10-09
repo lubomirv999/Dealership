@@ -7,7 +7,6 @@
     using Microsoft.AspNetCore.Authorization;
     using Microsoft.AspNetCore.Identity;
     using Microsoft.AspNetCore.Mvc;
-    using Microsoft.AspNetCore.Mvc.Rendering;
     using Microsoft.Extensions.Configuration;
     using System;
     using System.Collections.Generic;
@@ -97,7 +96,7 @@
             {
                 var user = new ApplicationUser { UserName = model.Email, Email = model.Email };
                 var result = await _userManager.CreateAsync(user, model.Password);
-                await _userManager.AddToRoleAsync(user, "Moderator");
+                await _userManager.AddToRoleAsync(user, CredentialsBuilder.ModeratorRole);
                 if (result.Succeeded)
                 {
                     return RedirectToAction("AllCars", "Car");
@@ -113,8 +112,8 @@
         public IActionResult Delete(string id)
         {
             var user = _usersService.FindById(id);
-            bool isAdmin = _userManager.IsInRoleAsync(user, Configuration.GetSection("AdminRole").Value.ToString()).Result;
-            bool lastAdmin = (_userManager.GetUsersInRoleAsync(Configuration.GetSection("AdminRole").Value.ToString()).Result.Count <= 1);
+            bool isAdmin = _userManager.IsInRoleAsync(user, CredentialsBuilder.AdminRole).Result;
+            bool lastAdmin = (_userManager.GetUsersInRoleAsync(CredentialsBuilder.AdminRole).Result.Count <= 1);
 
             if (user.UserName == User.Identity.Name)
             {
@@ -181,7 +180,7 @@
         [Authorize(Roles = "Admin")]
         public async Task<IActionResult> ManageRoles(string userId, string[] roles)
         {
-            string adminRole = Configuration.GetSection("AdminRole").Value.ToString();
+            string adminRole = CredentialsBuilder.AdminRole;
             ApplicationUser user = await this._userManager.FindByIdAsync(userId);
 
             if (user == null)

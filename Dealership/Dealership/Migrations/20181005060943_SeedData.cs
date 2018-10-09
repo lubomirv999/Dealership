@@ -25,8 +25,8 @@
         {
             var roles = new[]
                        {
-                            "Admin",
-                            "Moderator"
+                            CredentialsBuilder.AdminRole,
+                            CredentialsBuilder.ModeratorRole
                         };
 
             foreach (var role in roles)
@@ -43,7 +43,7 @@
             }
 
             var adminUser = _userManager.FindByEmailAsync(_adminEmail).Result;
-            var admins = _userManager.GetUsersInRoleAsync(_configuration.GetSection("AdminRole").Value.ToString()).Result.Count;
+            var admins = _userManager.GetUsersInRoleAsync(CredentialsBuilder.AdminRole).Result.Count;
 
             if (admins <= 0)
             {
@@ -53,9 +53,9 @@
                     UserName = _adminEmail
                 };
 
-                _userManager.CreateAsync(adminUser, _configuration.GetSection("AdminPassword").Value.ToString()).Wait();
-                _userManager.AddToRoleAsync(adminUser, _configuration.GetSection("AdminRole").Value.ToString()).Wait();
-                _userManager.AddToRoleAsync(adminUser, _configuration.GetSection("ModeratorRole").Value.ToString()).Wait();
+                _userManager.CreateAsync(adminUser, CredentialsBuilder.AdminPassword).Wait();
+                _userManager.AddToRoleAsync(adminUser, CredentialsBuilder.AdminRole).Wait();
+                _userManager.AddToRoleAsync(adminUser, CredentialsBuilder.ModeratorRole).Wait();
             }
         }
 
@@ -78,7 +78,7 @@
             _userManager = scope.ServiceProvider.GetService<UserManager<ApplicationUser>>();
             _roleManager = scope.ServiceProvider.GetService<RoleManager<IdentityRole>>();
             _configuration = scope.ServiceProvider.GetService<IConfiguration>();
-            _adminEmail = _configuration.GetSection("AdminEmail").Value.ToString();
+            _adminEmail = CredentialsBuilder.AdminEmail;
         }
     }
 }

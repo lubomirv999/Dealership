@@ -4,8 +4,6 @@ function confirmAction() {
     if (confirm('Do you really want to delete the selected photo?')) {
         let parent = $(this).parent('.image-ctr');
 
-        console.log($(this).attr('data-photoId'));
-
         $.ajax({
             url: "/Car/DeletePhoto",
             data: {

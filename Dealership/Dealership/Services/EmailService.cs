@@ -1,6 +1,7 @@
 ﻿namespace Dealership.Services
 {
     using Dealership.Data;
+    using Dealership.Models;
     using Dealership.Models.CarModels;
     using Microsoft.Extensions.Configuration;
     using System;
@@ -17,14 +18,14 @@
 
         public void SendEMail(BuyCarFormModel personInfo, Car carToBuy)
         {
-            string id = Configuration.GetSection("EmailId").Value.ToString();
-            string password = Configuration.GetSection("EmailPassword").Value.ToString();
+            string id = CredentialsBuilder.EmailId;
+            string password = CredentialsBuilder.EmailPassword;
             string msg = $"Person with name {personInfo.FirstName} {personInfo.LastName}{Environment.NewLine}Wants to buy car #{carToBuy.Id} ({carToBuy.Manufacturer} {carToBuy.Model}){Environment.NewLine}Contact him on Phone: {personInfo.GSM} or E-Mail: {personInfo.Email}{Environment.NewLine}Comment: {personInfo.Comment}";
             string emailTitle = $@"{carToBuy.Manufacturer} {carToBuy.Model} ID# {carToBuy.Id}";
 
             SmtpClient client = new SmtpClient
             {
-                Host = "smtp.gmail.com",
+                Host = CredentialsBuilder.Host,
                 Port = 587,
                 EnableSsl = true,
                 DeliveryMethod = SmtpDeliveryMethod.Network,

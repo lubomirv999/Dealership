@@ -3,8 +3,7 @@
 function confirmAction() {
     if (confirm('Do you really want to delete the selected comment?')) {
         let parent = $(this).parent('.comment');
-
-        console.log($(this).attr('data-commentId'));
+        let child = $(this).parent('.reply');
 
         $.ajax({
             url: "/Car/DeleteComment",
@@ -16,6 +15,7 @@ function confirmAction() {
         });
 
         parent.remove();
+        child.remove();
 
         return true;
     } else {
