@@ -2,8 +2,8 @@
 
 function confirmAction() {
     if (confirm('Do you really want to delete the selected comment?')) {
-        let parent = $(this).parent('.comment');
-        let child = $(this).parent('.reply');
+        let parent = $(this).parent('.author').parent('.comment');
+        let child = $(this).parent('.replier').parent('.reply');
 
         $.ajax({
             url: "/Car/DeleteComment",

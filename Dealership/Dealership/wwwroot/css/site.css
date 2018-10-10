@@ -679,6 +679,7 @@ input[type=text]:focus, textarea:focus {
     border-radius: 15px;
     padding: 25px;
     margin-bottom: 15px;
+    background-color:lightgray;
 }
 
 .comment:hover {
@@ -699,7 +700,7 @@ input[type=text]:focus, textarea:focus {
 
 .reply{
     font-size: 1em;
-    padding: 15px 0 15px 0;   
+    margin: 15px 0 15px 0;   
 }
 
 .reply-author, .reply-content {
