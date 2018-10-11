@@ -15,23 +15,23 @@
     {
         private const int PageSize = 6;
 
-        private readonly ICarService carsService;
-        private readonly IEmailService emailService;
-        private readonly UserManager<ApplicationUser> userManager;
-        private readonly ICommentService commentService;
+        private readonly UserManager<ApplicationUser> _userManager;
+        private readonly ICarService _carsService;
+        private readonly IEmailService _emailService;        
+        private readonly ICommentService _commentService;
 
-        public CarController(ICarService carsService, IEmailService emailService, ICommentService commentService, UserManager<ApplicationUser> userManager)
+        public CarController(UserManager<ApplicationUser> userManager, ICarService carsService, IEmailService emailService, ICommentService commentService)
         {
-            this.carsService = carsService;
-            this.emailService = emailService;
-            this.commentService = commentService;
-            this.userManager = userManager;
+            this._userManager = userManager;
+            this._carsService = carsService;
+            this._emailService = emailService;
+            this._commentService = commentService;            
         }
 
         public IActionResult AllCars(string sort, string searchQuery, int page = 1)
         {
             ViewBag.SearchQuery = searchQuery;
-            var cars = this.carsService.All(sort, searchQuery, PageSize, page);
+            var cars = this._carsService.All(sort, searchQuery, PageSize, page);
 
             return View("AllCars", new CarListModel
             {
@@ -56,9 +56,9 @@
                 return this.View("Buy", PersonToSend);
             }
 
-            Car carToBuy = carsService.FindById(PersonToSend.CarToBuyId);
+            Car carToBuy = _carsService.FindById(PersonToSend.CarToBuyId);
 
-            this.emailService.SendEMail(PersonToSend, carToBuy);
+            this._emailService.SendEMail(PersonToSend, carToBuy);
             return View("Thanks");
         }
 
@@ -91,7 +91,7 @@
                 Price = addCarModel.Price
             };
 
-            this.carsService.Add(addCarModel, images);
+            this._carsService.Add(addCarModel, images);
 
             TempData["message"] = "You have succesfully added your car for sale.";
 
@@ -101,7 +101,7 @@
         [Authorize(Roles = "Moderator")]
         public IActionResult Edit(int id)
         {
-            var car = this.carsService.FindById(id);
+            var car = this._carsService.FindById(id);
 
             if (car == null)
             {
@@ -137,14 +137,14 @@
                 return this.View(editModel);
             }
 
-            var carExists = this.carsService.Exists(id);
+            var carExists = this._carsService.Exists(id);
 
             if (!carExists)
             {
                 return NotFound();
             }
 
-            this.carsService.Edit(id, editModel, images);
+            this._carsService.Edit(id, editModel, images);
 
             TempData["message"] = "You have succesfully edited your car.";
 
@@ -154,21 +154,21 @@
         [Authorize(Roles = "Moderator")]
         public IActionResult Delete(int id)
         {
-            this.carsService.Delete(id);
+            this._carsService.Delete(id);
 
             return RedirectToAction("AllCars");
         }
 
         public IActionResult Details(int id)
         {
-            var carExists = this.carsService.Exists(id);
+            var carExists = this._carsService.Exists(id);
 
             if (!carExists)
             {
                 return NotFound();
             }
 
-            Car car = this.carsService.FindById(id);
+            Car car = this._carsService.FindById(id);
 
             return View(car);
         }
@@ -176,15 +176,18 @@
         [Authorize]
         public IActionResult AddComment(int carId, string content, int? parentCommentId)
         {
-            var carExists = this.carsService.Exists(carId);
-            ApplicationUser user = this.userManager.GetUserAsync(HttpContext.User).Result;            
+            var carExists = this._carsService.Exists(carId);
+            ApplicationUser user = this._userManager.GetUserAsync(HttpContext.User).Result;            
 
             if (!carExists)
             {
                 return NotFound();
             }
 
-            this.commentService.Add(carId, content, user.Id, parentCommentId);
+            if (content != null)
+            {
+                this._commentService.Add(carId, content, user.Id, parentCommentId);
+            }            
 
             return RedirectToAction("Details", new { id = carId });
         }
@@ -193,14 +196,14 @@
         [Authorize(Roles = "Moderator")]
         public void DeleteComment(int commentId)
         {
-            this.commentService.Delete(commentId);
+            this._commentService.Delete(commentId);
         }
 
         [HttpPost]
         [Authorize(Roles = "Moderator")]
         public void DeletePhoto(int photoId)
         {
-            this.carsService.DeletePhoto(photoId);
+            this._carsService.DeletePhoto(photoId);
         }
     }
 }

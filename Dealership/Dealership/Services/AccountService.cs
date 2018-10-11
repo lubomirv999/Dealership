@@ -9,18 +9,18 @@
 
     public class AccountService : IAccountService
     {
-        private readonly DealershipDbContext db;
+        private readonly DealershipDbContext _db;
 
         public AccountService(DealershipDbContext db)
         {
-            this.db = db;
+            this._db = db;
         }
 
         public AdminListingUsersModel All(int pageSize, int page = 1)
         {
             AdminListingUsersModel model = new AdminListingUsersModel();
 
-            model.Users = this.db.Users
+            model.Users = this._db.Users
                 .Skip((page - 1) * pageSize)
                 .Take(pageSize)
                 .ToList();
@@ -31,7 +31,7 @@
 
         public IEnumerable<SelectListItem> AllRoles()
         {
-            return this.db.Roles.Select(r => new SelectListItem
+            return this._db.Roles.Select(r => new SelectListItem
             {
                 Text = r.Name,
                 Value = r.Name
@@ -41,17 +41,17 @@
 
         public void Delete(ApplicationUser user)
         {
-            this.db.Remove(user);
-            this.db.SaveChanges();
+            this._db.Remove(user);
+            this._db.SaveChanges();
         }
 
         public int Count()
         {
-            return db.Users.Count();
+            return _db.Users.Count();
         }
 
         public ApplicationUser FindById(string id)
-            => this.db
+            => this._db
             .Users
             .Where(u => u.Id == id)
             .FirstOrDefault();

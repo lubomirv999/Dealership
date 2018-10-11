@@ -1,8 +1,6 @@
 ﻿namespace Dealership.Models.CarViewModels
 {
     using Dealership.Data.Enums;
-    using Microsoft.AspNetCore.Http.Internal;
-    using System.Collections.Generic;
     using System.ComponentModel.DataAnnotations;
 
     public class CarCreateFormModel

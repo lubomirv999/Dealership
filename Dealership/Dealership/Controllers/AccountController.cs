@@ -20,21 +20,21 @@
 
         private readonly UserManager<ApplicationUser> _userManager;
         private readonly SignInManager<ApplicationUser> _signInManager;
-        private readonly IAccountService _usersService;
         private readonly RoleManager<IdentityRole> _roleManager;
+        private readonly IAccountService _usersService;
         private IConfiguration Configuration { get; }
 
         public AccountController(
-            IAccountService usersService,
             UserManager<ApplicationUser> userManager,
             SignInManager<ApplicationUser> signInManager,
             RoleManager<IdentityRole> roleManager,
+            IAccountService usersService,
             IConfiguration configuration)
         {
             _userManager = userManager;
             _signInManager = signInManager;
-            _usersService = usersService;
             _roleManager = roleManager;
+            _usersService = usersService;
             Configuration = configuration;
         }
 
@@ -58,11 +58,13 @@
         public async Task<IActionResult> Login(LoginViewModel model, string returnUrl = null)
         {
             ViewData["ReturnUrl"] = returnUrl;
+
             if (ModelState.IsValid)
             {
                 // This doesn't count login failures towards account lockout
                 // To enable password failures to trigger account lockout, set lockoutOnFailure: true
                 var result = await _signInManager.PasswordSignInAsync(model.Email, model.Password, model.RememberMe, lockoutOnFailure: false);
+
                 if (result.Succeeded)
                 {
                     return RedirectToAction("AllCars", "Car");
@@ -92,15 +94,19 @@
         public async Task<IActionResult> CreateUser(CreateUserViewModel model, string returnUrl = null)
         {
             ViewData["ReturnUrl"] = returnUrl;
+
             if (ModelState.IsValid)
             {
                 var user = new ApplicationUser { UserName = model.Email, Email = model.Email };
                 var result = await _userManager.CreateAsync(user, model.Password);
+
                 await _userManager.AddToRoleAsync(user, CredentialsBuilder.ModeratorRole);
+
                 if (result.Succeeded)
                 {
                     return RedirectToAction("AllCars", "Car");
                 }
+
                 AddErrors(result);
             }
 

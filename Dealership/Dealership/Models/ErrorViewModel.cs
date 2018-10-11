@@ -1,5 +1,3 @@
-using System;
-
 namespace Dealership.Models
 {
     public class ErrorViewModel

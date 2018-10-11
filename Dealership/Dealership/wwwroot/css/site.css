@@ -360,7 +360,56 @@ ul.facilities-list.clearfix {
     color: #474646;
 }
 
+.details-btns{
+    padding-bottom: 15px;
+}
+
 /* Details Page */
+
+/* Details Page Images */
+
+div.gallery {
+    border: 1px solid #ccc;
+}
+
+div.gallery:hover {
+    border: 1px solid #777;
+}
+
+div.desc {
+    padding: 15px;
+    text-align: center;
+}
+
+.responsive {
+    padding: 0 6px;
+    float: left;
+    margin-bottom: 15px;
+}
+
+.details-img {
+    width: auto;
+    height: 150px;    
+}
+
+.details-img:hover{
+    transform: scale(1.3);
+}
+
+@media only screen and (max-width: 700px) {
+    .responsive {
+        width: 49.99999%;
+        margin: 6px 0;
+    }
+}
+
+@media only screen and (max-width: 500px) {
+    .responsive {
+        width: 100%;
+    }
+}
+
+/* Details Page Images */
 
 /* Create Admin */
 
@@ -498,6 +547,16 @@ li.nav-links a:hover {
     background-color: white;
     color: dodgerblue;
 }
+
+/* Edit Page Images*/
+
+.img-edit{
+    width: 100%;
+    height: 300px;
+    margin-bottom: 15px;
+}
+
+/* Edit Page Images*/
 
 /* Search CSS */
 
@@ -650,12 +709,6 @@ input[type=text]:focus, textarea:focus {
 
 .detail-info {
     font-weight: bold;
-}
-
-.details-img {
-    width: auto;
-    height: 225px;
-    padding: 10px;
 }
 
 .details-img:hover {

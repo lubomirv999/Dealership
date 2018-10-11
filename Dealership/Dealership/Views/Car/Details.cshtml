@@ -6,20 +6,13 @@
 
 <h1 class="text-center">Car Details</h1>
 
-@if (User.IsInRole("Moderator"))
-{
-    <div class=" text-center col-lg-12 col-md-12 col-sm-12 col-xs-12">
-        <a class="btn btn-warning btn-md edit-car-all-btn" asp-controller="Car" asp-action="Edit" asp-route-id="@Model.Id">Edit</a>
-        <a class="btn btn-danger btn-md delete-car-all-btn" asp-controller="Car" asp-action="Delete" asp-route-id="@Model.Id">Delete</a>
-    </div>
-}
-
-<div class="col-md-8 col-md-offset-2 details-page-heading">
+<div class="col-md-8 col-md-offset-3 details-page-heading">
     <div class="pull-left">
         <h3>@Model.Manufacturer @Model.Model</h3>
     </div>
     <div class="p-r">
         <h3>&euro; @Model.Price</h3>
+
         <p>
             <i class="fa fa-star"></i>
             <i class="fa fa-star"></i>
@@ -30,7 +23,7 @@
     </div>
 </div>
 
-<div class="col-md-8 details-images text-center">
+<div class="col-lg-6 col-lg-offset-2 col-lg-pull-1 details-images text-center">
     @if (Model.Images.Count <= 0)
     {
         <img src="~/images/not-found.png" class="col-md-4 details-img clearfix" alt="No Image">
@@ -39,12 +32,16 @@
     {
         @foreach (var image in Model.Images)
         {
-            <img src="~/images/@image.ImageUrl" class="col-md-4 details-img clearfix" alt="@Model.Manufacturer @Model.Model">
+            <div class="responsive">
+                <div class="gallery">
+                    <img src="~/images/@image.ImageUrl" class="details-img" alt="@Model.Manufacturer @Model.Model">
+                </div>
+            </div>
         }
     }
 </div>
 
-<div class="col-md-4 car-details-sidebar single-block">
+<div class="col-md-4 col-lg-pull-1 car-details-sidebar single-block">
     <h2 class="title">Specifications</h2>
     <ul>
         <li>
@@ -92,6 +89,14 @@
     <a class="btn btn-primary" asp-controller="Car" asp-action="Buy" asp-route-id="@Model.Id">Buy this car</a>
 </div>
 
+@if (User.IsInRole("Moderator"))
+{
+    <div class="text-center col-lg-12 col-md-12 col-sm-12 col-xs-12 details-btns">
+        <a class="btn btn-warning btn-md edit-car-all-btn" asp-controller="Car" asp-action="Edit" asp-route-id="@Model.Id">Edit</a>
+        <a class="btn btn-danger btn-md delete-car-all-btn" asp-controller="Car" asp-action="Delete" asp-route-id="@Model.Id">Delete</a>
+    </div>
+}
+
 <div class="text-center col-md-12">
     @if (!Model.Comments.Any())
     {
@@ -101,7 +106,6 @@
     {
         @foreach (var comment in Model.Comments)
         {
-
             @if (comment.ParentCommentId == null)
             {
                 <div class="comment col-lg-4 col-lg-offset-4 col-md-6 col-md-offset-3 col-sm-12 col-xs-12">

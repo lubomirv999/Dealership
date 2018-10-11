@@ -1,8 +1,8 @@
-﻿using Newtonsoft.Json.Linq;
-using System.IO;
-
-namespace Dealership.Models
+﻿namespace Dealership.Models
 {
+    using Newtonsoft.Json.Linq;
+    using System.IO;
+
     public static class CredentialsBuilder
     {
         public static string ConnectionString { get; private set; }

@@ -7,13 +7,13 @@
 
     public interface IAccountService
     {
-        AdminListingUsersModel All(int pageSize, int page = 1);
-
-        int Count();
+        AdminListingUsersModel All(int pageSize, int page = 1);        
 
         ApplicationUser FindById(string id);
 
         IEnumerable<SelectListItem> AllRoles();
+
+        int Count();
 
         void Delete(ApplicationUser user);
     }

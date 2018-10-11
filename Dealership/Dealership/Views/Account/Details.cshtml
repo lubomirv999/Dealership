@@ -21,6 +21,7 @@
 
 <form class="text-center details-info col-lg-12" method="post" asp-controller="Account" asp-action="ManageRoles">
     <input type="hidden" name="userId" value="@Model.User.Id" />
+
     @foreach (var role in Model.AllRoles)
     {
         <div class="form-check">
@@ -28,5 +29,6 @@
             <input id="@(role.Text + "Role")" type="checkbox" name="roles" value="@role.Text" />
         </div>
     }
+
     <button class="btn-warning" type="Submit">Edit</button>
 </form>
