@@ -690,12 +690,12 @@ input[type=text]:focus, textarea:focus {
     font-size: 1.3em;
 }
 
-.authorName, .content-text {
+.authorName{
     font-weight: bold;
 }
 
 .content{
-    font-size: 1.2em;
+    font-size: 1.3em;
 }
 
 .reply{
@@ -703,7 +703,7 @@ input[type=text]:focus, textarea:focus {
     margin: 15px 0 15px 0;   
 }
 
-.reply-author, .reply-content {
+.reply-author/*, .reply-content*/ {
     font-weight: bold;
 }
 
