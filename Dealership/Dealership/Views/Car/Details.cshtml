@@ -116,29 +116,23 @@
                     </p>
                     <p class="content"><span class="content-text">@comment.Content</span></p>
 
-
-
                     @foreach (var subCom in Model.Comments)
                     {
                         @if (subCom.ParentCommentId == comment.Id)
                         {
-                            
-                    <div class="reply col-lg-offset-1 col-md-offset-1 col-sm-offset-1 col-xs-offset-1">
-                        <hr />
-                        <p class="replier">
-                            <span class="reply-author">
-                                @subCom.Author.UserName replied:
-                            </span>
-                            @if (User.IsInRole("Moderator"))
-                            {
-                                <button data-commentId="@subCom.Id" class="btn btn-danger delete-comment-btn"><i class="fa fa-trash" aria-hidden="true"></i></button>
-                            }
-                        </p>
-                        <p><span class="reply-content">@subCom.Content</span></p>
-
-
-
-                    </div>
+                            <div class="reply col-lg-offset-1 col-md-offset-1 col-sm-offset-1 col-xs-offset-1">
+                                <hr />
+                                <p class="replier">
+                                    <span class="reply-author">
+                                        @subCom.Author.UserName replied:
+                                    </span>
+                                    @if (User.IsInRole("Moderator"))
+                                    {
+                                        <button data-commentId="@subCom.Id" class="btn btn-danger delete-comment-btn"><i class="fa fa-trash" aria-hidden="true"></i></button>
+                                    }
+                                </p>
+                                <p><span class="reply-content">@subCom.Content</span></p>
+                            </div>
                         }
                     }
 
@@ -146,10 +140,10 @@
                         @if (User.Identity.IsAuthenticated)
                         {
 
-                        <form asp-controller="Car" asp-action="AddComment" asp-route-carId="@Model.Id" asp-route-parentCommentId="@comment.Id">
-                            <input required id="content" type="text" name="content" placeholder="Reply..." />
-                            <button class="btn-info" type="submit" value="Reply">Reply</button>
-                        </form>
+                            <form asp-controller="Car" asp-action="AddComment" asp-route-carId="@Model.Id" asp-route-parentCommentId="@comment.Id">
+                                <input required id="content" type="text" name="content" placeholder="Reply..." />
+                                <button class="btn-info" type="submit" value="Reply">Reply</button>
+                            </form>
                         }
                     </div>
                 </div>
