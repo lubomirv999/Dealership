@@ -300,10 +300,6 @@ ul.facilities-list.clearfix {
 
 /* Details Page */
 
-.pull-left {
-    float: left !important;
-}
-
 .heading-car p {
     margin-bottom: 0;
 }
@@ -394,6 +390,7 @@ div.desc {
 
 .details-img:hover{
     transform: scale(1.3);
+    transition: ease .3s;
 }
 
 @media only screen and (max-width: 700px) {
@@ -458,7 +455,6 @@ div.desc {
 .user-info {
     font-size: 17px;
     color: #2bb6a3;
-    outline: none !important;
     padding-left: 10px;
     padding-top: 20px;
 }
@@ -730,7 +726,7 @@ input[type=text]:focus, textarea:focus {
 
 .comment {
     border-radius: 15px;
-    padding: 25px;
+    padding: 13px;
     margin-bottom: 15px;
     background-color:lightgray;
 }
@@ -772,10 +768,6 @@ input[type=text]:focus, textarea:focus {
 
 .reply-form {
     margin-bottom: 20px;
-}
-
-.delete-comment-btn {
-    margin-bottom: 25px;
 }
 
 /* Details Page */
