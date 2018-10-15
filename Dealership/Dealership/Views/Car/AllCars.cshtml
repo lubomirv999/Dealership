@@ -59,7 +59,7 @@
                 <div class="car-box-thumbnail">
                     @if (c.Images.Any())
                     {
-                        <img src="~/images/@c.Images.FirstOrDefault().ImageUrl">
+                        <img src="~/images/@c.Images.FirstOrDefault().ImageUrl" alt="@c.Manufacturer @c.Model picture">
                     }
                     else
                     {
