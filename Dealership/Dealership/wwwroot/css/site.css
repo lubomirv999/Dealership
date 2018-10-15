@@ -557,7 +557,7 @@ li.nav-links a:hover {
 /* Search CSS */
 
 .search {
-    margin-top: 3px;
+    margin:4px
 }
 
 .search-btn {
@@ -592,7 +592,7 @@ input[type=text], textarea {
     border: 1px solid #DDDDDD;
     outline: none;
     padding: 3px 0px 3px 3px;
-    margin: 5px 1px 3px 0px;
+    margin: 5px 0px 6px 0px;
     -webkit-transition: all 0.30s ease-in-out;
     -moz-transition: all 0.30s ease-in-out;
     -ms-transition: all 0.30s ease-in-out;
@@ -603,7 +603,7 @@ input[type=text]:focus, textarea:focus {
     border: 1px solid rgba(81, 203, 238, 1);
     box-shadow: 0 0 5px rgba(81, 203, 238, 1);
     padding: 3px 0px 3px 3px;
-    margin: 5px 1px 3px 0px;
+    margin: 5px 0px 6px 0px;
 }
 
 .sell-car-btn {

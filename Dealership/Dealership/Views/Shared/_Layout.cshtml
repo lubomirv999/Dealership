@@ -29,11 +29,12 @@
                     <span class="icon-bar"></span>
                     <i class="fa fa-bars"></i>
                 </button>
-                <a asp-area="" asp-controller="Car" asp-action="AllCars" class="navbar-brand nav-brand">Dealership</a>
+
             </div>
 
             <div class="navbar-collapse collapse">
                 <ul class="nav navbar-nav">
+                    <li><a asp-area="" asp-controller="Car" asp-action="AllCars" class="navbar-brand nav-brand">Dealership</a></li>
                     <li class="nav-links"><a asp-area="" asp-controller="Car" asp-action="AllCars">Home</a></li>
 
                     @if (User.IsInRole("Moderator"))
@@ -43,21 +44,38 @@
 
                     @if (User.IsInRole("Admin"))
                     {
-                        <li id="create-admin" class="nav-links"><a asp-area="" asp-controller="Account" asp-action="CreateUser">Register New User</a></li>
-                        <li id="create-admin" class="nav-links"><a asp-area="" asp-route-page="1" asp-controller="Account" asp-action="All">All Users</a></li>
+                        <li class="nav-links"><a asp-area="" asp-controller="Account" asp-action="CreateUser">Register New User</a></li>
+                        <li class="nav-links"><a asp-area="" asp-route-page="1" asp-controller="Account" asp-action="All">All Users</a></li>
                     }
 
-                    <li class="nav-links">
+                    <li class="nav-links ">
                         <div class="search">
                             <form class="form-wrapper">
                                 <input class="form-control form-control-sm mr-3 w-75" type="text" name="searchQuery" placeholder="Search" value="@ViewBag.SearchQuery" aria-label="Search">
                                 <button asp-controller="Car" asp-action="AllCars" class="search-btn">Search</button>
                             </form>
                         </div>
-                    </li>
-                </ul>
 
-                @await Html.PartialAsync("_LoginPartial")
+                    </li>
+
+                    @if (User.Identity.IsAuthenticated)
+                    {
+                        <li class="nav-links">
+                            <a>Hello, @User.Identity.Name</a>
+                        </li>
+
+                        <li class="nav-links admin-btns">
+                            <form asp-controller="Account" asp-action="Logout">
+                                <button class="logout-btn" type="submit">Log out</button>
+                            </form>
+                        </li>
+                    }
+                    else
+                    {
+                        <li class="nav-links admin-btns"><a asp-area="" asp-controller="Account" asp-action="Login">Log in</a></li>
+                    }
+
+                </ul>
             </div>
         </div>
     </nav>
