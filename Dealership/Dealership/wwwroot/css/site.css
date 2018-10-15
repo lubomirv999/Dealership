@@ -81,8 +81,8 @@
 }
 
 .form-group{
-    margin-top:5px;
-    margin-bottom:10px;
+    margin-top:7px;
+    margin-bottom:13px;
 }
 
 .form-wrapper input {
@@ -425,7 +425,7 @@ div.desc {
 
 .all-users {
     clear: both;
-    color: #34D1BE;
+    color: dodgerblue;
     padding-left: 30px;
 }
 
@@ -437,7 +437,7 @@ div.desc {
     -ms-box-shadow: 1px 1px 2px 0 #CCCCCC;
     box-shadow: 1px 1px 2px 0 #CCCCCC;
     margin-bottom: 16px;
-    padding: 20px;
+    min-width:400px;
 }
 
 .table thead > tr > th span {
@@ -459,7 +459,7 @@ div.desc {
 
 .user-info {
     font-size: 17px;
-    color: #2bb6a3;
+    color: deepskyblue;
     padding-left: 10px;
     padding-top: 20px;
 }
@@ -481,7 +481,7 @@ div.desc {
 }
 
 .table a.table-link.default {
-    color: #2bb6a3;
+    color: deepskyblue;
 }
 
 .table a.table-link.danger {
@@ -539,6 +539,7 @@ li.nav-links a {
     font-size: 1.1em;
     color: white;
     margin-bottom:5px;
+    margin-top:5px;
 }
 
 a.nav-brand:hover {
@@ -570,11 +571,17 @@ li.nav-links a:hover {
 .search-btn {
     border: 1px solid dodgerblue;
     border-radius: 5px;
-    background-color: white;
+    background-color: #FAFAFA;
     color: dodgerblue;
     padding: 7px 10px 7px 10px;
     margin-top:4px;
 }
+
+.search-btn:hover{
+    color:deepskyblue;
+    background-color:white;
+}
+
 
 /* Search CSS */
 
@@ -802,6 +809,7 @@ input[type=text]:focus, textarea:focus {
     font-size: 1.1em;
     color: white;
     padding: 15px 15px 14px 15px;
+    margin-top:5px;
 }
 
 .logout-btn:hover {
