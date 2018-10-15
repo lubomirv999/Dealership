@@ -32,10 +32,11 @@
 
             </div>
 
+            
+
             <div class="navbar-collapse collapse">
                 <ul class="nav navbar-nav">
-                    <li><a asp-area="" asp-controller="Car" asp-action="AllCars" class="navbar-brand nav-brand">Dealership</a></li>
-                    <li class="nav-links"><a asp-area="" asp-controller="Car" asp-action="AllCars">Home</a></li>
+                    <li class="nav-links"><a asp-area="" asp-controller="Car" asp-action="AllCars">Dealership</a></li>
 
                     @if (User.IsInRole("Moderator"))
                     {
@@ -48,14 +49,15 @@
                         <li class="nav-links"><a asp-area="" asp-route-page="1" asp-controller="Account" asp-action="All">All Users</a></li>
                     }
 
-                    <li class="nav-links ">
-                        <div class="search">
-                            <form class="form-wrapper">
-                                <input class="form-control form-control-sm mr-3 w-75" type="text" name="searchQuery" placeholder="Search" value="@ViewBag.SearchQuery" aria-label="Search">
-                                <button asp-controller="Car" asp-action="AllCars" class="search-btn">Search</button>
+                    <li class="nav-links col-md-4 col-lg-3 col-sm-5 col-xs-12">
+                        <div class="form-group">
+                            <form class="input-group">
+                                <input class="form-control" type="text" name="searchQuery" placeholder="Search" value="@ViewBag.SearchQuery" aria-label="Search" />
+                                <span class="input-group-btn">
+                                    <button asp-controller="Car" asp-action="AllCars" class="btn btn-default search-btn">Search</button>
+                                </span>
                             </form>
                         </div>
-
                     </li>
 
                     @if (User.Identity.IsAuthenticated)
@@ -64,7 +66,7 @@
                             <a>Hello, @User.Identity.Name</a>
                         </li>
 
-                        <li class="nav-links admin-btns">
+                        <li class="nav-links">
                             <form asp-controller="Account" asp-action="Logout">
                                 <button class="logout-btn" type="submit">Log out</button>
                             </form>
@@ -72,7 +74,7 @@
                     }
                     else
                     {
-                        <li class="nav-links admin-btns"><a asp-area="" asp-controller="Account" asp-action="Login">Log in</a></li>
+                        <li class="nav-links"><a asp-area="" asp-controller="Account" asp-action="Login">Log in</a></li>
                     }
 
                 </ul>

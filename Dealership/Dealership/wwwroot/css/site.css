@@ -80,6 +80,11 @@
     zoom: 1;
 }
 
+.form-group{
+    margin-top:5px;
+    margin-bottom:10px;
+}
+
 .form-wrapper input {
     background: #eee;
     border: 0;
@@ -525,6 +530,7 @@ div.desc {
 
 a.nav-brand {
     border-radius: 5px;
+    font-size: 1.1em;
     color: white;
 }
 
@@ -532,6 +538,7 @@ li.nav-links a {
     border-radius: 5px;
     font-size: 1.1em;
     color: white;
+    margin-bottom:5px;
 }
 
 a.nav-brand:hover {
@@ -565,7 +572,8 @@ li.nav-links a:hover {
     border-radius: 5px;
     background-color: white;
     color: dodgerblue;
-    padding: 5px 10px 8px 10px;
+    padding: 7px 10px 7px 10px;
+    margin-top:4px;
 }
 
 /* Search CSS */
@@ -602,8 +610,6 @@ input[type=text], textarea {
 input[type=text]:focus, textarea:focus {
     border: 1px solid rgba(81, 203, 238, 1);
     box-shadow: 0 0 5px rgba(81, 203, 238, 1);
-    padding: 3px 0px 3px 3px;
-    margin: 5px 0px 6px 0px;
 }
 
 .sell-car-btn {
