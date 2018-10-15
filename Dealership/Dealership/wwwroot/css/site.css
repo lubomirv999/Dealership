@@ -223,6 +223,10 @@ ul.facilities-list.clearfix {
     font-size: 20px;
 }
 
+.no-cars{
+    padding-bottom: 15px;
+}
+
 .is-featured {
     background: #ffb400;
 }
@@ -472,7 +476,11 @@ div.desc {
     line-height: inherit;
 }
 
-.user-actions-table{
+.table a.table-link.default{
+    text-decoration: none;
+}
+
+.user-actions-table {
     width: 20%;
 }
 
@@ -571,15 +579,16 @@ li.nav-links a:hover {
 .search-btn {
     border: 1px solid dodgerblue;
     border-radius: 5px;
-    background-color: #FAFAFA;
-    color: dodgerblue;
+    background-color: #FFB400;
+    color: white;
+    font-weight: bold;
     padding: 7px 10px 7px 10px;
     margin-top:4px;
 }
 
-.search-btn:hover{
-    color:deepskyblue;
-    background-color:white;
+.search-btn:hover {
+    background-color: #ffca4c;
+    color: white;
 }
 
 
@@ -807,9 +816,12 @@ input[type=text]:focus, textarea:focus {
     border: none;
     border-radius: 5px;
     font-size: 1.1em;
+    text-align: left;
     color: white;
-    padding: 15px 15px 14px 15px;
-    margin-top:5px;
+    width: 100%;
+    padding: 10px 15px 10px 15px;    
+    margin-top: 10px;
+    margin-bottom: 10px;
 }
 
 .logout-btn:hover {
