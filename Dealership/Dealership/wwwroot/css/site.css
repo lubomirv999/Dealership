@@ -578,6 +578,7 @@ li.nav-links a:hover {
 
 .search-btn {
     border: 1px solid dodgerblue;
+    border-left:0px;
     border-radius: 5px;
     background-color: #FFB400;
     color: white;
