@@ -49,6 +49,8 @@
                 }
             }
 
+            //test
+
             carEntity.Images = dataImages;
 
             this._db.Cars.Add(carEntity);
