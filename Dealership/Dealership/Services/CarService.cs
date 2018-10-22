@@ -47,9 +47,7 @@
                         dataImages.Add(dataImg);
                     }
                 }
-            }
-
-            //test
+            }           
 
             carEntity.Images = dataImages;
 
