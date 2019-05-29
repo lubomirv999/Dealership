@@ -398,8 +398,8 @@ div.desc {
 }
 
 .details-img:hover{
-    transform: scale(1.3);
-    transition: ease .3s;
+    transform: scale(2);
+    transition: ease .2s;
 }
 
 @media only screen and (max-width: 700px) {
@@ -564,7 +564,7 @@ li.nav-links a:hover {
 
 .img-edit{
     width: 100%;
-    height: 300px;
+    height: auto;
     margin-bottom: 15px;
 }
 
@@ -909,68 +909,38 @@ footer {
     font-size: 1.3em;
 }
 
+.car-box img {
+    height: 100%;
+    width: auto
+}
+.car-box-thumbnail {
+    text-align: center;
+}
+
 @media screen and (max-width: 350px) {
     .car-box-thumbnail {
         height: 165px;
     }
-
-    .car-box img {
-        height: 165px;
+    body {
+        padding-top: 50px;
     }
 }
 
-@media screen and (min-width: 351px) and (max-width: 480px) {
+@media screen and (min-width: 351px) and (max-width: 768px) {
+    .car-box-thumbnail {
+        height: 195px;
+    }
+    body {
+        padding-top: 50px;
+    }
+}
+@media screen and (min-width: 769px) and (max-width: 1199px) {
     .car-box-thumbnail {
         height: 195px;
     }
 
-    .car-box img {
-        height: 195px;
-    }
-}
-
-@media screen and (min-width: 480px) and (max-width: 600px) {    
-    .car-box-thumbnail {        
-        height: 195px;
-    }
-
-    .car-box img {
-        height: 195px;
-    }
-}
-
-@media screen and (min-width: 601px) and (max-width: 650px) {
-    .car-box-thumbnail {
-        height: 195px;
-    }
-
-    .car-box img {
-        height: 195px;
-    }
-}
-
-@media screen and (min-width: 651px) and (max-width: 767px) {
-    .car {
-        display: flex;
-        width: 50%;
-    }
-
-    .car-box-thumbnail {
-        height: 195px;
-    }
-
-    .car-box img {
-        height: 195px;
-    }
-}
-
-@media screen and (min-width: 768px) and (max-width: 1023px) {
-    .car-box-thumbnail {
-        height: 195px;
-    }
-
-    .car-box img {
-        height: 195px;
+    body {
+        padding-top: 122px;
     }
 }
 
@@ -978,28 +948,22 @@ footer {
     .car-box-thumbnail {
         height: 180px;
     }
+}
 
-    .car-box img {
-        height: 180px;
+@media screen and (min-width: 1200px) {
+    body {
+        padding-top: 50px;
     }
 }
 
-@media screen and (min-width: 1440px) {
-    .car-box-thumbnail {
-        height: 260px;
+    @media screen and (min-width: 1440px) {
+        .car-box-thumbnail {
+            height: 260px;
+        }
     }
 
-    .car-box img {
-        height: 260px;
-    }
-}
-
-@media screen and (min-width: 2560px) {
-    .car-box-thumbnail {
-        height: 450px;
-    }
-
-    .car-box img{
-        height: 100%;
-    }
-}   
+    @media screen and (min-width: 2560px) {
+        .car-box-thumbnail {
+            height: 450px;
+        }
+    }   
